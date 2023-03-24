@@ -11,5 +11,6 @@ app.use(router)
 app.mount('#app')
 hyRequest.request({
   url: '/home/multidata',
-  method: 'GET'
+  method: 'GET',
+  showLoading: false
 })
