@@ -10,17 +10,17 @@ import type {
 } from 'axios'
 
 // 拦截器
-interface HyRequestInterceptors {
+interface HyRequestInterceptors<T = AxiosResponse> {
   requestInterceptor?: (
     config: InternalAxiosRequestConfig
   ) => InternalAxiosRequestConfig
   requestInterceptorCatch?: (error: any) => any
-  responeseInterceptor?: (config: AxiosResponse) => AxiosResponse
+  responeseInterceptor?: (config: T) => T
   responeseInterceptorCatch?: (error: any) => any
 }
 // 继承AxiosRequestConfig
-interface HyRequestConfig extends AxiosRequestConfig {
-  interceptors?: HyRequestInterceptors
+interface HyRequestConfig<T = AxiosResponse> extends AxiosRequestConfig {
+  interceptors?: HyRequestInterceptors<T>
   showLoading?: boolean
 }
 
@@ -33,19 +33,19 @@ class hyRequest {
     timeout: parseInt(process.env.VUE_APP_BASE_TIME_OUT as string),
     interceptors: {
       requestInterceptor: (config) => {
-        console.log('请求成功拦截')
+        console.log('实例请求成功拦截')
         return config
       },
       requestInterceptorCatch: (err) => {
-        console.log('请求失败拦截')
+        console.log('实例请求失败拦截')
         return err
       },
       responeseInterceptor: (res) => {
-        console.log('响应成功拦截')
+        console.log('实例响应成功拦截')
         return res
       },
       responeseInterceptorCatch: (err) => {
-        console.log('响应失败拦截')
+        console.log('实例响应失败拦截')
         return err
       }
     }
@@ -91,7 +91,7 @@ class hyRequest {
     )
   }
 
-  request<T>(config: HyRequestConfig): Promise<T> {
+  request<T>(config: HyRequestConfig<T>): Promise<T> {
     // 返回一个Promise对象，将得到的请求结果返回出去
     return new Promise((resolve, reject) => {
       // 单独的拦截器
@@ -107,7 +107,7 @@ class hyRequest {
         .then((res) => {
           if (config.interceptors?.responeseInterceptor) {
             console.log('单独的响应拦截')
-            res = config.interceptors.responeseInterceptor(res as any) as any
+            res = config.interceptors.responeseInterceptor(res)
           }
           this.showLoading = true // 再将值设置回来，防止影响下一个请求
           resolve(res)
@@ -119,15 +119,15 @@ class hyRequest {
     })
   }
 
-  get<T>(config: HyRequestConfig) {
+  get<T>(config: HyRequestConfig<T>): Promise<T> {
     return this.request<T>({ ...config, method: 'GET' })
   }
 
-  post<T>(config: HyRequestConfig) {
+  post<T>(config: HyRequestConfig<T>): Promise<T> {
     return this.request<T>({ ...config, method: 'POST' })
   }
 
-  delete<T>(config: HyRequestConfig) {
+  delete<T>(config: HyRequestConfig<T>): Promise<T> {
     return this.request<T>({ ...config, method: 'DELETE' })
   }
 }
