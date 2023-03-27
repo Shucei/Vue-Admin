@@ -9,8 +9,19 @@ app.use(global)
 app.use(store)
 app.use(router)
 app.mount('#app')
-hyRequest.request({
-  url: '/home/multidata',
-  method: 'GET',
-  showLoading: false
-})
+
+interface DataType {
+  data: any
+  returnCode: string
+  success: boolean
+}
+
+hyRequest
+  .request<DataType>({
+    url: '/home/multidata',
+    method: 'GET',
+    showLoading: true
+  })
+  .then((res) => {
+    console.log(res)
+  })

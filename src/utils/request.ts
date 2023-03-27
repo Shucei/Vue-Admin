@@ -53,8 +53,7 @@ class hyRequest {
   constructor(config: HyRequestConfig) {
     this.instance = axios.create(config)
     this.interceptors = config.interceptors
-    console.log(config.showLoading)
-    // 用于默认情况为显示
+    // 用于默认情况为显示,为null或者undefined返回??后面
     this.showLoading = config.showLoading ?? true
     // 对应实例的拦截，自定义拦截内容config(作用于不同的业务比如有的要token有的可以不用)，扩展性更高
     this.instance.interceptors.request.use(
@@ -92,29 +91,44 @@ class hyRequest {
     )
   }
 
-  request(config: HyRequestConfig): void {
-    // 单独的拦截器
-    if (config.interceptors?.requestInterceptor) {
-      console.log('单独的请求拦截')
-      config = config.interceptors.requestInterceptor(config as any)
-    }
-    if (config.showLoading === false) {
-      this.showLoading = config.showLoading
-    }
-    this.instance
-      .request(config)
-      .then((res) => {
-        if (config.interceptors?.responeseInterceptor) {
-          console.log('单独的响应拦截')
-          res = config.interceptors.responeseInterceptor(res as any)
-        }
-        console.log(res)
-        this.showLoading = true // 再将值设置回来，防止影响下一个请求
-      })
-      .catch((err) => {
-        this.showLoading = true // 再将值设置回来，防止影响下一个请求
-        return err
-      })
+  request<T>(config: HyRequestConfig): Promise<T> {
+    // 返回一个Promise对象，将得到的请求结果返回出去
+    return new Promise((resolve, reject) => {
+      // 单独的拦截器
+      if (config.interceptors?.requestInterceptor) {
+        console.log('单独的请求拦截')
+        config = config.interceptors.requestInterceptor(config as any)
+      }
+      if (config.showLoading === false) {
+        this.showLoading = config.showLoading
+      }
+      this.instance
+        .request<any, T>(config)
+        .then((res) => {
+          if (config.interceptors?.responeseInterceptor) {
+            console.log('单独的响应拦截')
+            res = config.interceptors.responeseInterceptor(res as any) as any
+          }
+          this.showLoading = true // 再将值设置回来，防止影响下一个请求
+          resolve(res)
+        })
+        .catch((err) => {
+          this.showLoading = true // 再将值设置回来，防止影响下一个请求
+          reject(err)
+        })
+    })
+  }
+
+  get<T>(config: HyRequestConfig) {
+    return this.request<T>({ ...config, method: 'GET' })
+  }
+
+  post<T>(config: HyRequestConfig) {
+    return this.request<T>({ ...config, method: 'POST' })
+  }
+
+  delete<T>(config: HyRequestConfig) {
+    return this.request<T>({ ...config, method: 'DELETE' })
   }
 }
 
