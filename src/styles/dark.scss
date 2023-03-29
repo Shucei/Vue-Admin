@@ -1,0 +1,8 @@
+html.dark {
+  background-color: #304156;
+  color: #bfcbd9;
+  img,
+  .dark-img-bg {
+    filter: brightness(0.8) saturate(1.25);
+  }
+}

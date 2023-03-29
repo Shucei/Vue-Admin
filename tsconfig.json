@@ -21,7 +21,9 @@
     "strict": true,
     // 在 vue 中支持 类似 react jsx的语法格式。
     "jsx": "preserve",
-    // ts编译后的js文件中生成Map文件
+    // 辅助的导入功能
+    "importHelpers": true,
+    // ts编译后的js文件中生成Map文件,映射文件(ts -> js)
     "sourceMap": true,
     "baseUrl": ".",
     // 是否可以导入json文件。
@@ -31,13 +33,14 @@
     //  有些依赖库底层 为了兼容CommonJs规范、AMD规范这二者的规范中相互兼容，使用了 export =，将二者规范统一。"esModuleInterop":true表示允许依赖库中出现export = 这种兼容规范导出的格式，TS 可以用import from导入
     "esModuleInterop": true,
     // 允许访问的底层依赖库
-    "lib": ["esnext", "dom"],
+    "lib": ["esnext", "dom", "dom.iterable"],
     // 对声明文件不进行类型检查
     "skipLibCheck": true,
     "paths": {
       "@/*": ["src/*"]
     }
   },
+  "exclude": ["node_modules"],
   // ts 编译器编译覆盖的范围。
   "include": [
     "src/**/*.ts",
