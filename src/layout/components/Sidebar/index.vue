@@ -1,12 +1,10 @@
 <template>
   <div class="">
     <div class="logo-container">
-      <SvgIcon icon="logo" :style="{ margin: margin }"></SvgIcon>
-
+      <SvgIcon icon="logo"></SvgIcon>
       <h1 class="logo-title" v-if="flag = $store.getters.sidebarOpened">
         Shu-Admin
       </h1>
-
     </div>
     <el-scrollbar>
       <sidebar-menu></sidebar-menu>
@@ -16,15 +14,11 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { ref, watch } from 'vue';
 import SidebarMenu from './SidebarMenu'
 
 const margin = ref('auto')
 const flag = ref(false)
-
-watch(flag, (newvalue) => {
-  newvalue ? margin.value = '' : margin.value = 'auto'
-})
 
 </script>
 
@@ -34,7 +28,10 @@ watch(flag, (newvalue) => {
   // padding: 10px 0 22px 0;
   display: flex;
   align-items: center;
-  justify-content: center;
+  // justify-content: center;
+  padding: 0 var(--el-menu-base-level-padding);
+  font-size: 20px;
+  width: 250px;
 
   .logo-title {
     color: #fff;
@@ -43,5 +40,9 @@ watch(flag, (newvalue) => {
     font-size: 20px;
     white-space: nowrap;
   }
+}
+
+::v-deep .el-menu-item {
+  width: 250px !important;
 }
 </style>

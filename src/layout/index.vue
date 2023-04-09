@@ -6,7 +6,7 @@
       <div class="fixed-header">
         <!-- 顶部的 navbar -->
         <Navbar />
-        <tags-view id="guide-tags"></tags-view>
+        <TagsView id="guide-tags"></TagsView>
       </div>
       <!-- 内容区 -->
       <AppMain />

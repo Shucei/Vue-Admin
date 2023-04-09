@@ -43,6 +43,8 @@
 </template>
 
 <script setup>
+import { reactive, ref } from 'vue';
+
 const ruleForm = reactive({
   mobile: '13800000002',
   password: 'ShuAdmin',

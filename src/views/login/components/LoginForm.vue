@@ -56,7 +56,7 @@ interface LogForm {
   password: string
 }
 const LoginForm = ref<LogForm>({
-  username: '13800000002',
+  username: '芥末i',
   password: '123456'
 })
 const i18n = useI18n()

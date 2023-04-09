@@ -2,16 +2,15 @@
   <el-menu :default-active="activeMenu" :collapse="!$store.getters.sidebarOpened"
     :background-color="$store.getters.cssVar.menuBg" :text-color="$store.getters.cssVar.menuText"
     :active-text-color="$store.getters.cssVar.menuActiveText" :unique-opened="true" router>
-
     <sidebar-item v-for="item in routes" :key="item.path" :route="item"></sidebar-item>
-
   </el-menu>
 
 
 </template>
 
 <script  setup>
-import { useRouter } from 'vue-router';
+import { computed } from 'vue'
+import { useRouter, useRoute } from 'vue-router';
 import { filterRouters, generateMenus } from '@/utils/route'
 import SidebarItem from './Sidebaritem.vue'
 const router = useRouter()
@@ -39,19 +38,17 @@ const activeMenu = computed(() => {
 ::v-deep .el-menu-item:hover {
   outline: 0 !important;
   color: #fbcd31;
-  background: linear-gradient(270deg, #2E95FB 50%, #FEFEFE 100%) !important;
-  border-radius: 5px;
+  background: #399ee6 !important;
 }
 
 ::v-deep .el-menu-item.is-active {
   color: #fbcd31 !important;
-  background: linear-gradient(270deg, #2E95FB 50%, #FEFEFE 100%) !important;
-  border-radius: 5px;
+  background: #399ee6 !important;
 }
 
 ::v-deep .el-sub-menu__title:hover {
   color: #fbcd31 !important;
-  background: linear-gradient(270deg, #2E95FB 50%, #FEFEFE 100%) !important;
-  border-radius: 5px;
+  background: #399ee6 !important;
+
 }
 </style>

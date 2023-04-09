@@ -108,36 +108,36 @@ const publicRoutes = [
     path: '/login',
     component: () => import('@/views/login/index.vue')
   },
-  // {
-  //   path: '/',
-  //   redirect: '/home', //重定向
-  //   component: layout,
-  //   children: [
-  //     {
-  //       path: '/home',
-  //       name: 'home',
-  //       component: () => import('@/views/home/index.vue'),
-  //       meta: {
-  //         title: 'home',
-  //         icon: 'home'
-  //       }
-  //     },
-  //     {
-  //       path: '/profile',
-  //       name: 'profile',
-  //       component: () => import('@/views/profile/index.vue'),
-  //       meta: {
-  //         title: 'profile',
-  //         icon: 'individual'
-  //       }
-  //     },
-  //     {
-  //       path: '/401',
-  //       name: '401',
-  //       component: () => import('@/views/error-page/401.vue')
-  //     }
-  //   ]
-  // },
+  {
+    path: '/',
+    redirect: '/home', //重定向
+    component: layout,
+    children: [
+      {
+        path: '/home',
+        name: 'home',
+        component: () => import('@/views/home/index.vue'),
+        meta: {
+          title: 'home',
+          icon: 'home'
+        }
+      },
+      {
+        path: '/profile',
+        name: 'profile',
+        component: () => import('@/views/profile/index.vue'),
+        meta: {
+          title: 'profile',
+          icon: 'individual'
+        }
+      }
+      // {
+      //   path: '/401',
+      //   name: '401',
+      //   component: () => import('@/views/error-page/401.vue')
+      // }
+    ]
+  },
   {
     path: '/404',
     component: () => import('@/views/404.vue')

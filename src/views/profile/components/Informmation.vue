@@ -40,7 +40,7 @@
 
 <script setup>
 import { ElMessage } from 'element-plus';
-import { ref, nextTick } from 'vue';
+import { ref, nextTick, reactive } from 'vue';
 const ruleForm = reactive({
   name: 'shucei',
   nickname: 'ShuAdmin',

@@ -38,10 +38,10 @@
 <script setup>
 import { useRouter } from 'vue-router';
 import { useStore } from 'vuex';
-import Hamburger from '@/components/Hamburger'
+import Hamburger from '@/components/hamburger.vue'
 import breadcrumb from '@/components/Breadcrumb/index.vue'
 import LangSelect from '@/components/LangSelect'
-import ThemePicker from '@/components/ThemeSelect/index'
+import ThemePicker from '@/components/ThemeSelect/index.vue'
 import Screenfull from '@/components/Screenfull'
 import headerSearch from '@/components/headerSearch/index';
 import Guide from '@/components/Guide'

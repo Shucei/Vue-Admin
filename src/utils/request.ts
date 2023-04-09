@@ -29,7 +29,7 @@ class hyRequest {
   interceptors?: HyRequestInterceptors
   showLoading: boolean //用于自定义显示loading
   static getHyRequest = new hyRequest({
-    baseURL: process.env.VUE_APP_SERVICE_URL,
+    baseURL: process.env.VUE_APP_BASE_API,
     timeout: parseInt(process.env.VUE_APP_BASE_TIME_OUT as string),
     interceptors: {
       requestInterceptor: (config) => {

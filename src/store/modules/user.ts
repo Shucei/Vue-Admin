@@ -1,23 +1,28 @@
+import { Module } from 'vuex'
 import {
   getUserInfo as getUser,
   login as submitLogin,
   getUserDetailByIdApi
-} from '@/api/user.js'
+} from '@/api/user'
 // import md5 from 'md5'
 // md5(password)
 import LocalCache from '@/utils/storage'
-export default {
+interface IRootState {
+  token: string
+  userInfo: any
+}
+const LoginUser: Module<IRootState, any> = {
   namespaced: true,
   state: () => ({
     token: LocalCache.getItem('token') || '', // 设置token为共享状态
     userInfo: {}
   }),
   mutations: {
-    setToken (state, data) {
+    setToken(state, data) {
       state.token = data
       LocalCache.setItem('token', data)
     },
-    setUserInfo (state, userInfo) {
+    setUserInfo(state, userInfo) {
       LocalCache.setItem('userInfo', userInfo)
       state.userInfo = userInfo
     }
@@ -29,28 +34,30 @@ export default {
      * @param {*} userInfo
      * @returns
      */
-    async login (context, userInfo) {
+    async login(context, userInfo) {
       const { username, password } = userInfo
       const data = await submitLogin({
-        mobile: username,
+        username,
         password
       })
+      console.log('data', data)
+
       context.commit('setToken', data)
       const curTime = Date.now()
       LocalCache.setItem('loginTime', curTime)
     },
-    async getUserInfo (context) {
-      const result = await getUser()
-      // 通过得到的用户基本资料得到id，发送一个得到员工基本信息的请求
-      const baseInfo = await getUserDetailByIdApi(result.userId)
+    async getUserInfo(context) {
+      const result: any = await getUser()
       // 将员工的基本信息和用户基本资料合并
-      const baseResult = { ...result, ...baseInfo }
+      const baseResult = result
       context.commit('setUserInfo', baseResult)
       return baseResult
     },
-    logout (context) {
+    logout(context) {
       context.commit('setToken', '')
       context.commit('setUserInfo', {})
     }
   }
 }
+
+export default LoginUser
