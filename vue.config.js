@@ -25,6 +25,8 @@ module.exports = defineConfig({
         symbolId: 'icon-[name]'
       })
 
+
+
   },
   configureWebpack: {
     plugins: [

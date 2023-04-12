@@ -1,8 +1,15 @@
 import { TAGS_VIEW } from '@/constant'
 import LocalCache from '@/utils/storage'
+
+export interface AppState {
+  sidebarOpened: boolean
+  language: string
+  tagsViewList: any[]
+}
+
 export default {
   namespaced: true,
-  state: () => ({
+  state: (): AppState => ({
     sidebarOpened: true,
     language: LocalCache.getItem('lang') || 'zh',
     tagsViewList: LocalCache.getItem(TAGS_VIEW) || []
@@ -11,20 +18,20 @@ export default {
     /**
      * 侧边栏伸缩变量控制
      */
-    triggerSidebarOpened (state) {
+    triggerSidebarOpened(state: AppState) {
       state.sidebarOpened = !state.sidebarOpened
     },
     /**
      * 设置国际化
      */
-    setLanguage (state, lang) {
+    setLanguage(state: AppState, lang: string) {
       LocalCache.setItem('lang', lang)
       state.language = lang
     },
     /**
      * 进入新的路由添加tag不能重复
      */
-    addTagsViewlist (state, tag) {
+    addTagsViewlist(state: AppState, tag: any) {
       const isfind = state.tagsViewList.some((item) => item.path === tag.path)
       // 重复就不需要添加进入
       if (!isfind) {
@@ -35,7 +42,10 @@ export default {
     /**
      * 为指定的 tag 修改 title
      */
-    changeTagsView (state, { index, tag }) {
+    changeTagsView(
+      state: AppState,
+      { index, tag }: { index: number; tag: any }
+    ) {
       state.tagsViewList[index] = tag
       LocalCache.setItem(TAGS_VIEW, state.tagsViewList)
     },
@@ -46,7 +56,7 @@ export default {
      * @param {*} payload
      * @returns
      */
-    removeTagsView (state, payload) {
+    removeTagsView(state: AppState, payload: { type: string; index: number }) {
       if (payload.type === 'index') {
         state.tagsViewList.splice(payload.index, 1)
       } else if (payload.type === 'other') {

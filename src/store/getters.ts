@@ -1,7 +1,10 @@
+import { GetterTree } from 'vuex'
+import { RootState } from '@/store/types'
 import { MAIN_COLOR } from '@/constant'
 import LocalCache from '@/utils/storage'
 import { generateColors } from '@/utils/theme'
-const getters = {
+
+const getters: GetterTree<RootState, RootState> = {
   token: (state) => state.user.token,
   hasUserInfo: (state) => {
     return JSON.stringify(state.user.userInfo) !== '{}'

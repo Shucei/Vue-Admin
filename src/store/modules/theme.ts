@@ -1,9 +1,16 @@
 import { MAIN_COLOR, DEFAULT_COLOR } from '@/constant/index'
 import LocalCache from '@/utils/storage'
 import variables from '@/styles/variables.module.scss'
+console.log(variables)
+
+export interface ThemeState {
+  mainColor: any
+  variables: any
+}
+
 export default {
   namespaced: true,
-  state: () => ({
+  state: (): ThemeState => ({
     mainColor: LocalCache.getItem(MAIN_COLOR) || DEFAULT_COLOR,
     variables
   }),
@@ -11,7 +18,7 @@ export default {
     /**
      * 设置主题色
      */
-    setMainColor (state, newColor) {
+    setMainColor(state: ThemeState, newColor: string) {
       state.mainColor = newColor
       state.variables.menuBg = newColor
       LocalCache.setItem(MAIN_COLOR, newColor)

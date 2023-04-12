@@ -48,6 +48,7 @@
     "src/**/*.tsx",
     "src/**/*.vue",
     "src/components/index.js",
-    "src/components/index.js"
+    "src/components/index.js",
+    "src/**/*.scss"
   ]
 }

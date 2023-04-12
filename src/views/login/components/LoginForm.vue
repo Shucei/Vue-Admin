@@ -2,7 +2,7 @@
   <div>
     <el-form ref="formRef" :model="LoginForm" :rules="loginRules">
       <el-form-item prop="username">
-        <el-input placeholder="用户名：admin / user" v-model="LoginForm.username">
+        <el-input placeholder="用户名：用户名 / 邮箱" v-model="LoginForm.username">
           <template #prefix>
             <el-icon class="el-input__icon">
               <User />
@@ -27,11 +27,9 @@
         <div>忘记密码</div>
       </div>
 
-      <el-form-item class="bnt-flex">
-        <el-button :icon="CircleClose" round size="large" @click="resetForm">{{
-          $t('msg.login.reset')
-        }}</el-button>
-        <el-button :icon="UserFilled" round size="large" type="primary" :loading="loading" @click="handerLogin">
+      <el-form-item>
+        <el-button class="bnt-flex" :icon="UserFilled" size="large" type="primary" :loading="loading"
+          @click="handerLogin">
           {{ $t('msg.login.loginBtn') }}
         </el-button>
       </el-form-item>
@@ -40,10 +38,9 @@
 </template>
 
 <script setup lang="ts">
-import type { FormInstance } from 'element-plus'
-import { validatePassword } from '@/utils/rules';
+import type { FormInstance, FormRules } from 'element-plus'
+import { validatePassword, validateUserName } from '@/utils/rules';
 import 'element-plus/es/components/message/style/css'
-import { ElMessage } from 'element-plus'
 import { CircleClose, UserFilled, Lock, User } from '@element-plus/icons-vue';
 import { ref, reactive } from 'vue';
 import { useRouter } from 'vue-router';
@@ -56,15 +53,15 @@ interface LogForm {
   password: string
 }
 const LoginForm = ref<LogForm>({
-  username: '芥末i',
+  username: '1003823477@qq.com',
   password: '123456'
 })
 const i18n = useI18n()
 // 验证规则
-const loginRules = reactive({
+const loginRules = reactive<FormRules>({
   username: [
-    { required: true, message: i18n.t('msg.login.usernameRule'), trigger: 'blur' },
-    { min: 3, max: 11, message: i18n.t('msg.login.usernameRule'), trigger: 'blur' },
+    { required: true, trigger: 'blur', validator: validateUserName() },
+
   ],
   password: [
     {
@@ -75,10 +72,10 @@ const loginRules = reactive({
   ]
 })
 
-// 重置
-const resetForm = () => {
-  formRef.value?.resetFields()
-}
+// // 重置
+// const resetForm = () => {
+//   formRef.value?.resetFields()
+// }
 
 // 处理登录
 const loading = ref(false)
@@ -91,11 +88,6 @@ const handerLogin = () => {
       try {
         loading.value = true
         await store.dispatch('user/login', LoginForm.value)
-        ElMessage({
-          message: '登录成功',
-          type: 'success',
-          duration: 1500,
-        });
         router.push('/')
       } catch (error) {
         console.log(error)
@@ -131,5 +123,10 @@ const handerLogin = () => {
       color: aqua;
     }
   }
+}
+
+.bnt-flex {
+  display: flex;
+  flex: 1;
 }
 </style>

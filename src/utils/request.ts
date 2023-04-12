@@ -1,7 +1,9 @@
 import axios from 'axios'
 import nprogress from 'nprogress'
 import 'nprogress/nprogress.css'
-
+import store from '@/store'
+import router from '@/router'
+import { ElMessage } from 'element-plus'
 import type {
   AxiosInstance,
   AxiosRequestConfig,
@@ -30,25 +32,25 @@ class hyRequest {
   showLoading: boolean //用于自定义显示loading
   static getHyRequest = new hyRequest({
     baseURL: process.env.VUE_APP_BASE_API,
-    timeout: parseInt(process.env.VUE_APP_BASE_TIME_OUT as string),
-    interceptors: {
-      requestInterceptor: (config) => {
-        console.log('实例请求成功拦截')
-        return config
-      },
-      requestInterceptorCatch: (err) => {
-        console.log('实例请求失败拦截')
-        return err
-      },
-      responeseInterceptor: (res) => {
-        console.log('实例响应成功拦截')
-        return res
-      },
-      responeseInterceptorCatch: (err) => {
-        console.log('实例响应失败拦截')
-        return err
-      }
-    }
+    timeout: parseInt(process.env.VUE_APP_BASE_TIME_OUT as string)
+    // interceptors: {
+    //   requestInterceptor: (config) => {
+    //     console.log('实例请求成功拦截')
+    //     return config
+    //   },
+    //   requestInterceptorCatch: (err) => {
+    //     console.log('实例请求失败拦截')
+    //     return err
+    //   },
+    //   responeseInterceptor: (res) => {
+    //     console.log('实例响应成功拦截')
+    //     return res
+    //   },
+    //   responeseInterceptorCatch: (err) => {
+    //     console.log('实例响应失败拦截')
+    //     return err
+    //   }
+    // }
   })
   constructor(config: HyRequestConfig) {
     this.instance = axios.create(config)
@@ -71,21 +73,60 @@ class hyRequest {
         if (this.showLoading) {
           nprogress.start()
         }
-        console.log('全局请求拦截')
+        const token = store.getters.token
+        if (token) {
+          config.headers.Authorization = 'Bearer ' + token
+          // token过期处理，主动处理
+          const newTime = Date.now()
+          const curTime = localStorage.getItem('loginTime') as any
+          if (newTime - curTime > 100000) {
+            store.dispatch('user/logout')
+            router.push('/login')
+            nprogress.done()
+            return Promise.reject(new Error('账号过期，请重新登录'))
+          } else {
+            // 续期，若在n秒内没有任何操作就过期，若操作了就重新赋个时间戳，保持时间的更新
+            localStorage.setItem('loginTime', JSON.stringify(Date.now()))
+          }
+        }
         return config
       },
       (err) => {
-        return err
+        return Promise.reject(err)
       }
     )
     this.instance.interceptors.response.use(
       (config) => {
         nprogress.done()
-        console.log('全局响应拦截')
-        return config.data
+        const { status, message, data } = config.data
+        if (status >= 200 && status < 400) {
+          ElMessage({
+            message: message,
+            type: 'success',
+            duration: 1500
+          })
+        } else {
+          ElMessage.error(message)
+          return Promise.reject(new Error())
+        }
+        return data
       },
       (err) => {
         nprogress.done()
+        // 判断后端token过期日期，被动处理token过期
+        // console.log(err)
+        // if (err.response && err.response.data.status === 401) {
+        //   // 当等于10002的时候 表示 后端告诉我token超时了
+        //   store.dispatch('user/logout') // 登出action 删除token
+        //   router.push('/login')
+        //   ElMessage({
+        //     message: '账号过期，请重新登录',
+        //     type: 'error',
+        //     duration: 2000
+        //   })
+        // } else {
+        //   ElMessage.error(err.message) // 提示错误信息
+        // }
         return err
       }
     )
