@@ -79,7 +79,7 @@ class hyRequest {
           // token过期处理，主动处理
           const newTime = Date.now()
           const curTime = localStorage.getItem('loginTime') as any
-          if (newTime - curTime > 100000) {
+          if (newTime - curTime > 1000000) {
             store.dispatch('user/logout')
             router.push('/login')
             nprogress.done()

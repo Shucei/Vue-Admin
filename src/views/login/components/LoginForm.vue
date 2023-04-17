@@ -72,6 +72,7 @@ const loginRules = reactive<FormRules>({
   ]
 })
 
+
 // // 重置
 // const resetForm = () => {
 //   formRef.value?.resetFields()
@@ -80,6 +81,7 @@ const loginRules = reactive<FormRules>({
 // 处理登录
 const loading = ref(false)
 const store = useStore()
+
 const router = useRouter()
 const handerLogin = () => {
   // 表单校验

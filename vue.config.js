@@ -11,7 +11,10 @@ module.exports = defineConfig({
     config.resolve.alias
       .set('@', path.resolve(__dirname, 'src'))
       .set('views', '@/views')
+
+
     // 内置的svg处理排除指定目录下的文件
+
     config.module.rule('svg').exclude.add(path.resolve('src/icons/svg')).end()
 
     config.module

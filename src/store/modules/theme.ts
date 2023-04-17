@@ -1,7 +1,6 @@
 import { MAIN_COLOR, DEFAULT_COLOR } from '@/constant/index'
 import LocalCache from '@/utils/storage'
 import variables from '@/styles/variables.module.scss'
-console.log(variables)
 
 export interface ThemeState {
   mainColor: any

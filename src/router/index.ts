@@ -1,109 +1,119 @@
-import { createRouter, createWebHistory } from 'vue-router'
-import type { RouteRecordRaw } from 'vue-router'
+
+import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router'
+
 import layout from '@/layout/index.vue'
 /**
  * 私有路由表
  */
-// const privateRoutes = [
-//   {
-//     path: '/user',
-//     component: layout,
-//     redirect: '/user/manage',
-//     meta: {
-//       title: 'user',
-//       icon: 'personnel'
-//     },
-//     children: [
-//       {
-//         path: '/user/manage',
-//         component: () => import('@/views/user-manage/index'),
-//         meta: {
-//           title: 'userManage',
-//           icon: 'personnel-manage'
-//         }
-//       },
-//       {
-//         path: '/user/role',
-//         component: () => import('@/views/role-list/index'),
-//         meta: {
-//           title: 'roleList',
-//           icon: 'role'
-//         }
-//       },
-//       {
-//         path: '/user/permission',
-//         component: () => import('@/views/permission-list/index'),
-//         meta: {
-//           title: 'permissionList',
-//           icon: 'permission'
-//         }
-//       },
-//       {
-//         path: '/user/info/:id',
-//         name: 'userInfo',
-//         component: () => import('@/views/user-info/index'),
-//         props: true,
-//         meta: {
-//           title: 'userInfo'
-//         }
-//       },
-//       {
-//         path: '/user/import',
-//         name: 'import',
-//         component: () => import('@/views/import/index'),
-//         meta: {
-//           title: 'excelImport'
-//         }
-//       }
-//     ]
-//   },
-//   {
-//     path: '/article',
-//     component: layout,
-//     redirect: '/article/ranking',
-//     meta: {
-//       title: 'article',
-//       icon: 'article'
-//     },
-//     children: [
-//       {
-//         path: '/article/ranking',
-//         component: () => import('@/views/article-ranking/index'),
-//         meta: {
-//           title: 'articleRanking',
-//           icon: 'article-ranking'
-//         }
-//       },
-//       {
-//         path: '/article/:id',
-//         component: () => import('@/views/article-detail/index'),
-//         meta: {
-//           title: 'articleDetail'
-//         }
-//       },
-//       {
-//         path: '/article/create',
-//         component: () => import('@/views/article-create/index'),
-//         meta: {
-//           title: 'articleCreate',
-//           icon: 'article-create'
-//         }
-//       },
-//       {
-//         path: '/article/editor/:id',
-//         component: () => import('@/views/article-create/index'),
-//         meta: {
-//           title: 'articleEditor'
-//         }
-//       }
-//     ]
-//   }
-// ]
 
-/**
- * 公开路由表
- */
-const publicRoutes = [
+
+
+const privateRoutes: RouteRecordRaw[] = [
+  {
+    path: '/user',
+
+
+    component: layout,
+    redirect: '/user/manage',
+    meta: {
+      title: 'user',
+      icon: 'personnel'
+    },
+    children: [
+      {
+        path: '/user/manage',
+        name: 'userManage',
+        component: () => import('@/views/user-manage/index.vue'),
+        meta: {
+          title: 'userManage',
+          icon: 'personnel-manage'
+        }
+      },
+      {
+        path: '/user/role',
+        name: 'roleList',
+        component: () => import('@/views/role-list/index.vue'),
+        meta: {
+          title: 'roleList',
+          icon: 'role'
+        }
+      },
+      {
+        path: '/user/permission',
+        name: 'permissionList',
+        component: () => import('@/views/permission-list/index.vue'),
+        meta: {
+          title: 'permissionList',
+          icon: 'permission'
+        }
+      },
+      {
+        path: '/user/info/:id',
+        name: 'userInfo',
+        component: () => import('@/views/user-info/index.vue'),
+        props: true,
+        meta: {
+          title: 'userInfo'
+        }
+      },
+      {
+        path: '/user/import',
+        name: 'import',
+        component: () => import('@/views/import/index.vue'),
+        meta: {
+          title: 'excelImport'
+        }
+      }
+    ]
+  },
+  {
+    path: '/article',
+    component: layout,
+    redirect: '/article/ranking',
+    meta: {
+      title: 'article',
+      icon: 'article'
+    },
+    children: [
+      {
+        path: '/article/ranking',
+        name: 'articleRanking',
+        component: () => import('@/views/article-ranking/index.vue'),
+        meta: {
+          title: 'articleRanking',
+          icon: 'article-ranking'
+        }
+      },
+      {
+        path: '/article/:id',
+        name: 'articleDetail',
+        component: () => import('@/views/article-detail/index.vue'),
+        meta: {
+          title: 'articleDetail'
+        }
+      },
+      {
+        path: '/article/create',
+        name: 'articleCreate',
+        component: () => import('@/views/article-create/index.vue'),
+        meta: {
+          title: 'articleCreate',
+          icon: 'article-create'
+        }
+      },
+      {
+        path: '/article/editor/:id',
+        name: 'articleEditor',
+        component: () => import('@/views/article-create/index.vue'),
+        meta: {
+          title: 'articleEditor'
+        }
+      }
+    ]
+  }
+]
+
+const publicRoutes: RouteRecordRaw[] = [
   {
     path: '/login',
     component: () => import('@/views/login/index.vue')
@@ -111,6 +121,11 @@ const publicRoutes = [
   {
     path: '/',
     redirect: '/home', //重定向
+    // 这里为什么报错，因为这里的layout是一个组件，而不是一个路由对象
+    // 怎么解决这里的报错呢？
+    // 1. 使用as any
+    // 2. 使用interface
+    // 3. 使用type
     component: layout,
     children: [
       {
@@ -144,7 +159,8 @@ const publicRoutes = [
   }
 ]
 
-const routes: Array<RouteRecordRaw> = [...publicRoutes]
+
+const routes: RouteRecordRaw[] = [...publicRoutes]
 
 const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),

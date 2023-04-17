@@ -1,16 +1,16 @@
-import request from '@/utils/request'
+import HyRequest from '@/utils/request'
 
-export function getEmployeeSimple() {
-  return request({
+export function getEmployeeSimple () {
+  return HyRequest({
     url: '/sys/user/simple'
   })
 }
 // 获取列表
-export const getEmployeeList = (params) => request.get('/sys/user', { params })
+export const getUserList = (params) => HyRequest.get('/user/lists', { params })
 
 // 删除员工
-export function delEmployee(id) {
-  return request({
+export function delEmployee (id) {
+  return HyRequest({
     url: `/sys/user/${id}`,
     method: 'delete'
   })
@@ -19,8 +19,8 @@ export function delEmployee(id) {
 /** **
  *  新增员工的接口
  * **/
-export function addEmployee(data) {
-  return request({
+export function addEmployee (data) {
+  return HyRequest({
     method: 'post',
     url: '/sys/user',
     data
@@ -31,8 +31,8 @@ export function addEmployee(data) {
  *  封装一个导入员工的接口
  *
  * ***/
-export function importEmployee(data) {
-  return request({
+export function importEmployee (data) {
+  return HyRequest({
     url: '/sys/user/batch',
     method: 'post',
     data
@@ -43,8 +43,8 @@ export function importEmployee(data) {
  *
  * 保存员工的基本信息
  * **/
-export function saveUserDetailById(data) {
-  return request({
+export function saveUserDetailById (data) {
+  return HyRequest({
     url: `/sys/user/${data.id}`,
     method: 'put',
     data
@@ -54,8 +54,8 @@ export function saveUserDetailById(data) {
 /** *
  *  读取用户详情的基础信息
  * **/
-export function getPersonalDetail(id) {
-  return request({
+export function getPersonalDetail (id) {
+  return HyRequest({
     url: `/employees/${id}/personalInfo`
   })
 }
@@ -63,8 +63,8 @@ export function getPersonalDetail(id) {
 /** *
  *  更新用户详情的基础信息
  * **/
-export function updatePersonal(data) {
-  return request({
+export function updatePersonal (data) {
+  return HyRequest({
     url: `/employees/${data.userId}/personalInfo`,
     method: 'put',
     data
@@ -75,8 +75,8 @@ export function updatePersonal(data) {
  * 获取用户的岗位信息
  *
  * ****/
-export function getJobDetail(id) {
-  return request({
+export function getJobDetail (id) {
+  return HyRequest({
     url: `/employees/${id}/jobs`
   })
 }
@@ -84,8 +84,8 @@ export function getJobDetail(id) {
 /**
  * 保存岗位信息
  * ****/
-export function updateJob(data) {
-  return request({
+export function updateJob (data) {
+  return HyRequest({
     url: `/employees/${data.userId}/jobs`,
     method: 'put',
     data
@@ -94,8 +94,8 @@ export function updateJob(data) {
 /** *
  * 给用户分配角色
  * ***/
-export function assignRoles(data) {
-  return request({
+export function assignRoles (data) {
+  return HyRequest({
     url: '/sys/user/assignRoles',
     data,
     method: 'put'

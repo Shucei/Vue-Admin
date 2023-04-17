@@ -9,6 +9,7 @@ export function addRole (data) {
     method: 'post'
   })
 }
+// 删除角色
 export function deleteRole (id) {
   return request({
     url: `/role/${id}`,
@@ -29,7 +30,10 @@ export function getRoleDetail (id) {
     url: `/role/${id}`
   })
 }
+
+
 // 给角色分配权限
+
 export function assignPerm (data) {
   return request({
     url: '/role/assignPrem',
@@ -37,3 +41,7 @@ export function assignPerm (data) {
     data
   })
 }
+
+
+
+

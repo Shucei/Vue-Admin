@@ -17,3 +17,5 @@ app.use(i18n)
 app.use(router)
 app.use(SvgIcon)
 app.mount('#app')
+
+

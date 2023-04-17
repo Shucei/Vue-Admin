@@ -14,10 +14,8 @@
 </template>
 
 <script setup>
-import { ref, watch } from 'vue';
-import SidebarMenu from './SidebarMenu'
-
-const margin = ref('auto')
+import { ref } from 'vue';
+import SidebarMenu from './SidebarMenu.vue';
 const flag = ref(false)
 
 </script>

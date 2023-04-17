@@ -18,8 +18,8 @@ const LoginUser: Module<IRootState, any> = {
   }),
   mutations: {
     setToken(state, data) {
-      state.token = data.token
-      LocalCache.setItem('token', data.token)
+      state.token = data
+      LocalCache.setItem('token', data)
     },
     setUserInfo(state, userInfo) {
       LocalCache.setItem('userInfo', userInfo)
@@ -39,14 +39,12 @@ const LoginUser: Module<IRootState, any> = {
         username,
         password
       })
-      context.commit('setToken', data)
+      context.commit('setToken', data.token)
       const curTime = Date.now()
       LocalCache.setItem('loginTime', curTime)
     },
     async getUserInfo(context) {
       const result = await getUserInfoById()
-      console.log(result)
-
       // 将员工的基本信息和用户基本资料合并
       const baseResult = result
       context.commit('setUserInfo', baseResult)

@@ -1,10 +1,11 @@
 import path from 'path-browserify'
-
+// 1. 生成菜单
+// 2. 过滤路由
 /**
  * 返回所有子路由
  */
-const getChildrenRoutes = (routes) => {
-  const result = []
+const getChildrenRoutes = (routes: any[]) => {
+  const result: any[] = []
   routes.forEach((route) => {
     if (route.children && route.children.length > 0) {
       result.push(...route.children)
@@ -17,7 +18,7 @@ const getChildrenRoutes = (routes) => {
  * 处理脱离层级的路由：某个一级路由为其他子路由，则剔除该一级路由，保留路由层级
  * @param {*} routes router.getRoutes()
  */
-export const filterRouters = (routes) => {
+export const filterRouters = (routes: any[]) => {
   const childrenRoutes = getChildrenRoutes(routes)
   return routes.filter((route) => {
     return !childrenRoutes.find((childrenRoute) => {
@@ -29,18 +30,18 @@ export const filterRouters = (routes) => {
 /**
  * 判断数据是否为空值
  */
-function isNull(data) {
+function isNull(data: any) {
   if (!data) return true
   if (JSON.stringify(data) === '{}') return true
   if (JSON.stringify(data) === '[]') return true
   return false
 }
+
 /**
  * 根据 routes 数据，返回对应 menu 规则数组
  */
-
-export function generateMenus(routes, basePath = '') {
-  const result = []
+export function generateMenus(routes: any[], basePath = '') {
+  const result: any[] = []
 
   // 遍历路由表
   routes.forEach((item) => {

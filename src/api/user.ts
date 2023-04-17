@@ -34,6 +34,7 @@ export const login = (data: IAccount) => {
 interface GuserId {
   id: string
 }
+
 interface UserInfo {
   label: string[]
   roleIds: any
