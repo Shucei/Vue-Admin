@@ -22,7 +22,7 @@
 </template>
 
 <script setup>
-import SelectColor from './components/SelectColor';
+import SelectColor from './components/SelectColor.vue';
 import { ref } from 'vue'
 
 const selectColorVisible = ref(false)

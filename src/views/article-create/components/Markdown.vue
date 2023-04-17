@@ -16,7 +16,7 @@ import '@toast-ui/editor/dist/toastui-editor.css'
 import '@toast-ui/editor/dist/i18n/zh-cn'
 import { onMounted } from 'vue'
 import { useStore } from 'vuex'
-import { watchSwitchLang } from '@/utils/i18n'
+import { watchSwitchLang } from '@/utils/i18n.ts'
 
 
 // Editor实例

@@ -11,7 +11,6 @@ const getChildrenRoutes = (routes: any[]) => {
       result.push(...route.children)
     }
   })
-
   return result
 }
 /**

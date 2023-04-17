@@ -121,11 +121,6 @@ const publicRoutes: RouteRecordRaw[] = [
   {
     path: '/',
     redirect: '/home', //重定向
-    // 这里为什么报错，因为这里的layout是一个组件，而不是一个路由对象
-    // 怎么解决这里的报错呢？
-    // 1. 使用as any
-    // 2. 使用interface
-    // 3. 使用type
     component: layout,
     children: [
       {
@@ -146,11 +141,6 @@ const publicRoutes: RouteRecordRaw[] = [
           icon: 'individual'
         }
       }
-      // {
-      //   path: '/401',
-      //   name: '401',
-      //   component: () => import('@/views/error-page/401.vue')
-      // }
     ]
   },
   {

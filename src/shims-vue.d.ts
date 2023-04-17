@@ -5,6 +5,7 @@ declare module '*.vue' {
   export default component
 }
 declare module 'path-browserify';
+declare module 'css-color-function'
 // declare module '*.scss' {
 //   const content: { [className: string]: string };
 //   export default content;
