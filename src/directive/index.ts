@@ -6,7 +6,7 @@ export default {
   }
 }
 
-// 定义指令(图片懒加载)
+// 定义指令(图片错误的时候显示默认图片)
 const defineDirective = (app: App) => {
   app.directive('lazy', {
     mounted(el: any, binding: any, vnode: any) {

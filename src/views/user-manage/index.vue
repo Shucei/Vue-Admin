@@ -10,11 +10,11 @@
     </el-card>
     <el-card>
       <el-table :data="list" border style="width: 100%">
-        <el-table-column label="#" type="index" />
-        <el-table-column prop="username" :label="$t('msg.excel.name')">
+        <el-table-column align="center" label="#" type="index" width="100" />
+        <el-table-column align="center" prop="username" :label="$t('msg.excel.name')">
         </el-table-column>
         <!-- 手机 -->
-        <el-table-column prop="mobile" :label="$t('msg.excel.mobile')">
+        <el-table-column align="center" prop="mobile" :label="$t('msg.excel.mobile')">
         </el-table-column>
         <!-- 头像 -->
         <el-table-column :label="$t('msg.excel.avatar')" align="center">
@@ -24,8 +24,8 @@
             <!-- </el-image> -->
           </template>
         </el-table-column>
-        <!-- 标签 -->
-        <el-table-column :label="$t('msg.excel.role')">
+        <!-- 描述 -->
+        <el-table-column align="center" :label="$t('msg.excel.role')">
           <template #default="{ row }">
             <div v-if="row.role && row.role.length > 0">
               <el-tag v-for="item in row.role" :key="item.id" size="small">{{
@@ -38,13 +38,13 @@
           </template>
         </el-table-column>
         <!-- 时间 -->
-        <el-table-column :label="$t('msg.excel.openTime')">
+        <el-table-column align="center" :label="$t('msg.excel.openTime')">
           <template v-slot="{ row }">
             <span>{{ fillteTime(row.timeOfEntry) }}</span>
           </template>
         </el-table-column>
         <!-- 查看、角色、删除 -->
-        <el-table-column :label="$t('msg.excel.action')" fixed="right" width="260">
+        <el-table-column align="center" :label="$t('msg.excel.action')" fixed="right" width="260">
           <template #default="{ row }">
             <el-button type="primary" size="small" @click="onShowClick(row.id)">{{
               $t('msg.excel.show')

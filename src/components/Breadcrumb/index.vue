@@ -29,7 +29,6 @@ const getBreadcrumbData = () => {
   breadcrumbData.value = route.matched.filter(
     item => item.meta && item.meta.title
   )
-  console.log(breadcrumbData.value)
 }
 // 监听路由变化时触发
 watch(
