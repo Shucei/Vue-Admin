@@ -17,28 +17,35 @@
   </div>
 </template>
 
-<script setup>
-import XLSX from 'xlsx'
-import { defineProps, ref } from 'vue'
-import { getHeaderRow, isExcel } from './utils/index.js'
+<script lang="ts" setup>
+import * as XLSX from 'xlsx'
+import { ref, defineProps, Ref } from 'vue'
+import { getHeaderRow, isExcel } from './utils/index'
+import { ElMessage } from 'element-plus'
 
-const props = defineProps({
-  // 上传前回调
-  beforeUpload: Function,
-  // 成功回调
-  onSuccess: Function
-})
+interface ExcelData {
+  header: string[]
+  results: Record<string, unknown>[]
+}
+
+const props = defineProps<{
+  beforeUpload?: (file: File) => boolean
+  onSuccess?: (data: any) => void
+}>()
 
 /**
  * 点击上传触发
  */
 const loading = ref(false)
-const excelUploadInput = ref(null)
+const excelUploadInput = ref<Ref | null>(null)
+
 const handleUpload = () => {
-  excelUploadInput.value.click()
+  excelUploadInput.value?.click()
 }
-const handleChange = e => {
-  const files = e.target.files
+const handleChange = (e: Event) => {
+  const target = e.target as HTMLInputElement
+  const files = target.files ?? []
+  // if (!files) return
   const rawFile = files[0] // only use files[0]
   if (!rawFile) return
   upload(rawFile)
@@ -47,7 +54,7 @@ const handleChange = e => {
 /**
  * 触发上传事件
  */
-const upload = rawFile => {
+const upload = (rawFile: File) => {
   excelUploadInput.value.value = null
   // 如果没有指定上传前回调的话
   if (!props.beforeUpload) {
@@ -64,7 +71,7 @@ const upload = rawFile => {
 /**
  * 读取数据（异步）
  */
-const readerData = rawFile => {
+const readerData = (rawFile: File): Promise<void> => {
   loading.value = true
   return new Promise((resolve, reject) => {
     // https://developer.mozilla.org/zh-CN/docs/Web/API/FileReader
@@ -74,7 +81,7 @@ const readerData = rawFile => {
     // https://developer.mozilla.org/zh-CN/docs/Web/API/FileReader/onload
     reader.onload = e => {
       // 1. 获取解析到的数据
-      const data = e.target.result
+      const data = e.target?.result
       // 2. 利用 XLSX 对数据进行解析
       const workbook = XLSX.read(data, { type: 'array' })
       // 3. 获取第一张表格(工作簿)名称
@@ -84,7 +91,7 @@ const readerData = rawFile => {
       // 5. 解析数据表头
       const header = getHeaderRow(worksheet)
       // 6. 解析数据体
-      const results = XLSX.utils.sheet_to_json(worksheet)
+      const results: Record<string, unknown>[] = XLSX.utils.sheet_to_json(worksheet)
       // 7. 传入解析之后的数据
       generateData({ header, results })
       // 8. loading 处理
@@ -100,16 +107,15 @@ const readerData = rawFile => {
 /**
  * 根据导入内容，生成数据
  */
-const generateData = excelData => {
-  props.onSuccess && props.onSuccess(excelData)
+const generateData = (excelDatas: ExcelData) => {
+  props.onSuccess && props.onSuccess(excelDatas)
 }
 
-// 拖拽上传
-const handleDrop = () => {
+const handleDrop = (e: DragEvent) => {
   // 上传中时，不允许操作
   if (loading.value) return
-  const files = e.dataTransfer.files
-  if (files.length !== 1) {
+  const files = e.dataTransfer?.files
+  if (files?.length !== 1) {
     ElMessage.error('必须要有一个文件')
     return
   }
@@ -122,11 +128,15 @@ const handleDrop = () => {
   upload(rawFile)
 }
 
-const handleDragover = (e) => {
+
+const handleDragover = (e: DragEvent) => {
   // https://developer.mozilla.org/zh-CN/docs/Web/API/DataTransfer/dropEffect
   // 在新位置生成源项的副本
+
+  if (!e.dataTransfer) return
   e.dataTransfer.dropEffect = 'copy'
 }
+
 
 </script>
 
