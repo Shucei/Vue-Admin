@@ -1,4 +1,5 @@
 import { createI18n } from 'vue-i18n'
+
 import mZhLocale from './lang/zh'
 import mEnLocale from './lang/en'
 import LocalCache from '@/utils/storage'
@@ -6,7 +7,7 @@ import store from '@/store'
 /**
  * 返回当前 lang
  */
-function getLanguage () {
+function getLanguage() {
   return LocalCache.getItem('lang') || store.getters.language || 'zh'
 }
 const messages = {

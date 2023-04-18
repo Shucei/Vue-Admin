@@ -1,4 +1,3 @@
-
 import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router'
 
 import layout from '@/layout/index.vue'
@@ -6,14 +5,11 @@ import layout from '@/layout/index.vue'
  * 私有路由表
  */
 
-
-
 const privateRoutes: RouteRecordRaw[] = [
   {
     path: '/user',
-
-
     component: layout,
+    name: 'user',
     redirect: '/user/manage',
     meta: {
       title: 'user',
@@ -69,6 +65,7 @@ const privateRoutes: RouteRecordRaw[] = [
   {
     path: '/article',
     component: layout,
+    name: 'article',
     redirect: '/article/ranking',
     meta: {
       title: 'article',
@@ -149,8 +146,7 @@ const publicRoutes: RouteRecordRaw[] = [
   }
 ]
 
-
-const routes: RouteRecordRaw[] = [...publicRoutes]
+const routes: RouteRecordRaw[] = [...publicRoutes, ...privateRoutes]
 
 const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),

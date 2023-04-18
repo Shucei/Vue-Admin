@@ -58,10 +58,12 @@
           </template>
         </el-table-column>
       </el-table>
-      <el-pagination class="pagination" @size-change="handleSizeChange" @current-change="handleCurrentChange"
-        :current-page="page.page" :page-sizes="[2, 5, 10, 20]" :page-size="page.size"
-        layout="total, sizes, prev, pager, next, jumper" :total="page.total">
-      </el-pagination>
+      <div class="pagination">
+        <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="page.page"
+          :page-sizes="[2, 5, 10, 20]" :page-size="page.size" layout="total, sizes, prev, pager, next, jumper"
+          :total="100">
+        </el-pagination>
+      </div>
     </el-card>
     <export-to-excel :page="page" v-model="exportToExcelVisible"></export-to-excel>
     <roles-dialog v-model="roleDialogVisible"></roles-dialog>
@@ -69,10 +71,10 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, watch } from 'vue'
 import ExportToExcel from './components/Export2Excel.vue'
 import RolesDialog from './components/roles.vue'
-import { getEmployeeList, delEmployee } from '@/api/user-manage'
+import { getUserList, delEmployee } from '@/api/user-manage'
 import { useRouter } from 'vue-router';
 import { ElMessageBox } from 'element-plus';
 import { useI18n } from 'vue-i18n';
@@ -85,7 +87,7 @@ const page = ref({
 })
 const list = ref([])
 const getUserMessageList = async () => {
-  const { total, rows } = await getEmployeeList({
+  const { total, rows } = await getUserList({
     page: page.value.page,
     size: page.value.size
   })

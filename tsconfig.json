@@ -50,5 +50,5 @@
     "src/components/index.js",
     "src/components/index.js",
     "src/**/*.scss"
-, "src/utils/route.js"  ]
+, "src/utils/route.js", "src/i18n/index.js"  ]
 }

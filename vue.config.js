@@ -7,11 +7,15 @@ const { ElementPlusResolver } = require('unplugin-vue-components/resolvers')
 
 module.exports = defineConfig({
   transpileDependencies: true,
+
   chainWebpack: (config) => {
     config.resolve.alias
       .set('@', path.resolve(__dirname, 'src'))
       .set('views', '@/views')
+      .set('vue-i18n', 'vue-i18n/dist/vue-i18n.cjs.js')
 
+    // 修复HMR
+    config.resolve.symlinks(true)
 
     // 内置的svg处理排除指定目录下的文件
 
@@ -38,7 +42,8 @@ module.exports = defineConfig({
       }),
       Components({
         resolvers: [ElementPlusResolver()]
-      })
+      }),
+
     ],
 
   },

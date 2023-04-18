@@ -14,9 +14,9 @@
 
 <script setup>
 
-import { getEmployeeList } from '@/api/user-manage';
+import { getUserList } from '@/api/user-manage';
 import { watchSwitchLang } from '@/utils/i18n';
-import { defineProps, defineEmits } from 'vue'
+import { defineProps, defineEmits, ref } from 'vue'
 import { useI18n } from 'vue-i18n';
 import EmployeeEnum from '@/utils/employees'
 const props = defineProps({
@@ -69,7 +69,7 @@ const exportData = async () => {
     '部门': 'departmentName'
   }
   const data = []
-  const { rows } = await getEmployeeList({
+  const { rows } = await getUserList({
     page: 1,
     size: props.page.total
   })

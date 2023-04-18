@@ -132,7 +132,6 @@ const handleDrop = (e: DragEvent) => {
 const handleDragover = (e: DragEvent) => {
   // https://developer.mozilla.org/zh-CN/docs/Web/API/DataTransfer/dropEffect
   // 在新位置生成源项的副本
-
   if (!e.dataTransfer) return
   e.dataTransfer.dropEffect = 'copy'
 }

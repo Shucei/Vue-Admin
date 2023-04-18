@@ -1,14 +1,14 @@
 /* eslint-disable */
 import { saveAs } from 'file-saver'
-import XLSX from 'xlsx'
+import * as XLSX from 'xlsx'
 
-function datenum(v, date1904) {
+function datenum (v, date1904) {
   if (date1904) v += 1462
   var epoch = Date.parse(v)
   return (epoch - new Date(Date.UTC(1899, 11, 30))) / (24 * 60 * 60 * 1000)
 }
 
-function sheet_from_array_of_arrays(data, opts) {
+function sheet_from_array_of_arrays (data, opts) {
   var ws = {}
   var range = {
     s: {
@@ -50,13 +50,13 @@ function sheet_from_array_of_arrays(data, opts) {
   return ws
 }
 
-function Workbook() {
+function Workbook () {
   if (!(this instanceof Workbook)) return new Workbook()
   this.SheetNames = []
   this.Sheets = {}
 }
 
-function s2ab(s) {
+function s2ab (s) {
   var buf = new ArrayBuffer(s.length)
   var view = new Uint8Array(buf)
   for (var i = 0; i != s.length; ++i) view[i] = s.charCodeAt(i) & 0xff
