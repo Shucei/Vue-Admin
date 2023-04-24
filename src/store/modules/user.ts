@@ -35,10 +35,11 @@ const LoginUser: Module<IRootState, any> = {
      */
     async login(context, userInfo) {
       const { username, password } = userInfo
-      const data = await submitLogin({
+      const { data } = await submitLogin({
         username,
         password
       })
+
       context.commit('setToken', data.token)
       const curTime = Date.now()
       LocalCache.setItem('loginTime', curTime)

@@ -24,8 +24,8 @@ export default {
     user: '用户',
     home: '首页',
     excelImport: 'Excel导入',
-    userManage: '员工管理',
-    userInfo: '员工信息',
+    userManage: '用户管理',
+    userInfo: '用户信息',
     roleList: '角色列表',
     permissionList: '权限列表',
     article: '文章',
@@ -91,7 +91,7 @@ export default {
     information: '基本信息',
     chapter: '章节',
     account: '账号绑定',
-    name: 'Sunday',
+    name: 'Shucei',
     job: '一个前端开发程序猿',
     Introduction:
       '高级技术专家，曾就职于国内一线互联网公司，统筹过的多个大型项目用户数已过千万级。致力于研究大前端技术，多次受邀参加国内前端技术分享会，如：2018 年 Google 中国技术分享会。'

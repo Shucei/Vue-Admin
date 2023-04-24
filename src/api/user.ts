@@ -1,40 +1,37 @@
 import HyRequest from '@/utils/request'
+import { IDataType } from './types'
 
 enum LoginApi {
   AccountLogin = '/user/login',
-  getLoginUser = '/user/getuser'
+  getLoginUser = '/user/getuser',
+  getUserDetailById = '/user/getuser',
+  setUserassignRolesId = '/user/assignRoles'
 }
 
-// 定义返回的类型，data不确定，有时候是{} 有时候是数组
-interface IDataType<T = any> {
-  status: number
-  message: string
-  data: T
-}
-
+/**
+ * 登录
+ */
 interface ILoginResult {
   token: string
   id: string
 }
-
 interface IAccount {
   username: string
   password: string
 }
-/**
- * 登录
- */
 export const login = (data: IAccount) => {
-  return HyRequest.post<ILoginResult>({
+  return HyRequest.post<IDataType<ILoginResult>>({
     url: LoginApi.AccountLogin,
     data
   })
 }
 
+/**
+ * 获取用户信息
+ */
 interface GuserId {
   id: string
 }
-
 interface UserInfo {
   label: string[]
   roleIds: any
@@ -52,16 +49,19 @@ interface UserInfo {
   updataTime: string
   __v: number
 }
-/**
- * 获取用户信息
- */
 export const getUserInfoById = (params?: GuserId) =>
   HyRequest.get<IDataType<UserInfo>>({ url: LoginApi.getLoginUser, params })
 
 /**
- * 获取用户基本信息 --- 用于头像
+ * 获取用户基本信息
  * @param id
  * @returns
  */
 export const getUserDetailByIdApi = (id: string) =>
-  HyRequest.get({ url: `/user/headimg/${id}` })
+  HyRequest.get<IDataType>({ url: LoginApi.getUserDetailById, params: { id } })
+
+export const setUserassignRolesApi = (data: any) =>
+  HyRequest.put<IDataType>({
+    url: LoginApi.setUserassignRolesId,
+    data
+  })

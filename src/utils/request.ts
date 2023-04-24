@@ -98,35 +98,47 @@ class hyRequest {
     this.instance.interceptors.response.use(
       (config) => {
         nprogress.done()
-        const { status, message, data } = config.data
-        if (status >= 200 && status < 400) {
-          ElMessage({
-            message: message,
-            type: 'success',
-            duration: 1500
-          })
-        } else {
-          ElMessage.error(message)
-          return Promise.reject(new Error())
+        const { status, message, data, total } = config.data
+        if (
+          message !== '获取角色列表成功' &&
+          message !== '获取用户列表成功' &&
+          message !== '获取菜单列表成功' &&
+          message !== '获取权限列表成功' &&
+          message !== '获取成功'
+        ) {
+          if (status >= 200 && status < 400) {
+            ElMessage({
+              message: message,
+              type: 'success',
+              duration: 1500
+            })
+          } else {
+            ElMessage({
+              message: '用户不存在',
+              type: 'warning',
+              duration: 1500
+            })
+            return Promise.reject(new Error())
+          }
         }
-        return data
+
+        return { ...config.data }
       },
       (err) => {
         nprogress.done()
         // 判断后端token过期日期，被动处理token过期
-        // console.log(err)
-        // if (err.response && err.response.data.status === 401) {
-        //   // 当等于10002的时候 表示 后端告诉我token超时了
-        //   store.dispatch('user/logout') // 登出action 删除token
-        //   router.push('/login')
-        //   ElMessage({
-        //     message: '账号过期，请重新登录',
-        //     type: 'error',
-        //     duration: 2000
-        //   })
-        // } else {
-        //   ElMessage.error(err.message) // 提示错误信息
-        // }
+        console.log(err)
+        if (err.response && err.response.data.status === 401) {
+          store.dispatch('user/logout') // 登出action 删除token
+          router.push('/login')
+          ElMessage({
+            message: err.response.data.error[0].msg,
+            type: 'error',
+            duration: 2000
+          })
+        } else {
+          ElMessage.error(err.message) // 提示错误信息
+        }
         return err
       }
     )
@@ -170,6 +182,9 @@ class hyRequest {
 
   delete<T>(config: HyRequestConfig<T>): Promise<T> {
     return this.request<T>({ ...config, method: 'DELETE' })
+  }
+  put<T>(config: HyRequestConfig<T>): Promise<T> {
+    return this.request<T>({ ...config, method: 'PUT' })
   }
 }
 

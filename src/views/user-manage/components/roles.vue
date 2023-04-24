@@ -1,6 +1,10 @@
 <template>
   <el-dialog :title="$t('msg.excel.roleDialogTitle')" :model-value="modelValue" @close="closed">
-    内容
+    <el-checkbox-group v-model="checkedCities">
+      <el-checkbox v-for="city in cities" :key="city._id" :label="city">{{
+        city.name
+      }}</el-checkbox>
+    </el-checkbox-group>
     <template #footer>
       <span class="dialog-footer">
         <el-button @click="closed">{{ $t('msg.universal.cancel') }}</el-button>
@@ -12,21 +16,60 @@
   </el-dialog>
 </template>
 
-<script setup>
-import { defineProps, defineEmits } from 'vue'
-defineProps({
-  modelValue: {
-    type: Boolean,
-    required: true
-  }
-})
-const emits = defineEmits(['update:modelValue'])
+<script lang="ts" setup>
+import { getRoleList } from '@/api/role';
+import { getUserDetailByIdApi, setUserassignRolesApi } from '@/api/user';
+import { defineProps, defineEmits, ref, watch } from 'vue'
+
+const props = defineProps<{
+  modelValue: boolean
+}>()
+const emits = defineEmits(['update:modelValue', 'getUserMessageList'])
+const userId = ref<string>('') // 用户id
+/**
+ * 角色列表
+ */
+interface List {
+  _id: number;
+  name: string;
+  description: string;
+  permIds: Array<{ _id: number; name: string }>;
+  createTime: string;
+}
+const cities = ref<List[]>([])
+const getPermissionList = async () => {
+  const { data } = await getRoleList({
+    page: 1, // 当前页码
+    pageSize: 100,
+  })
+  cities.value = data
+}
+// getPermissionList()
 
 /**
-  确定按钮点击事件
+ * 选中的角色
  */
+const checkedCities = ref([])
+
+/**
+ * 获取指定用户角色
+ */
+const getUserDetailById = async (id: string) => {
+  const { data } = await getUserDetailByIdApi(id)
+  checkedCities.value = data.roleIds || [] // 赋值本用户的角色
+}
+
+/**
+* 确定按钮点击事件
+*/
 const onConfirm = async () => {
+  console.log(userId.value, checkedCities.value);
+  await setUserassignRolesApi({
+    userId: userId.value,
+    roleIds: checkedCities.value
+  })
   closed()
+  emits('getUserMessageList')
 }
 
 /**
@@ -35,6 +78,21 @@ const onConfirm = async () => {
 const closed = () => {
   emits('update:modelValue', false)
 }
+
+watch(() => props.modelValue, (val) => {
+  if (val) {
+    getPermissionList()
+  }
+})
+
+
+// 暴露给父组件的方法
+defineExpose({
+  getUserDetailById, // 获取指定用户角色
+  userId, // 用户id
+  checkedCities
+})
+
 </script>
 
 <style lang="scss" scoped>

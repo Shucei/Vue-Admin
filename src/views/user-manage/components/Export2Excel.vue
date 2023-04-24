@@ -68,15 +68,14 @@ const exportData = async () => {
     '工号': 'workNumber',
     '部门': 'departmentName'
   }
-  const data = []
-  const { rows } = await getUserList({
-    page: 1,
-    size: props.page.total
+  const rows = []
+  const { data } = await getUserList({
+    page: props.page,
+    pageSize: props.pageSize
   })
-  console.log(rows);
   // 也可以用两个map，就不需要a作为接受了，可以在a=处直接return，forEach改为map
   let a
-  rows.forEach(item => {
+  data.forEach(item => {
     a = Object.keys(headers).map(key => {
       // 对时间进行处理
       if (headers[key] === 'timeOfEntry' || headers[key] === 'correctionTime') {
@@ -94,13 +93,13 @@ const exportData = async () => {
       return item[headers[key]]
     })
     console.log(a);
-    data.push(a)
+    rows.push(a)
   })
 
   import('@/utils/Export2Excel').then(excel => {
     excel.export_json_to_excel({
       header: Object.keys(headers),
-      data: data,
+      data: rows,
       filename: '员工资料表',
       // autoWidth: true // 单元格是否要自适应
       bookType: 'xlsx' // 导出文件类型

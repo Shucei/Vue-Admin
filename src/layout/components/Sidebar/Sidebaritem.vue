@@ -20,7 +20,7 @@
   </el-menu-item>
 </template>
 
-<script setup>
+<script lang="ts" setup>
 import MenuItem from './MenuItem.vue';
 import { defineProps } from 'vue'
 import { generateTitle } from '@/utils/i18n'

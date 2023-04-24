@@ -38,7 +38,8 @@
     "skipLibCheck": true,
     "paths": {
       "@/*": ["src/*"]
-    }
+    },
+    
   },
   "exclude": ["node_modules"],
   // ts 编译器编译覆盖的范围。

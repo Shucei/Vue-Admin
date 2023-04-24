@@ -19,17 +19,17 @@
         <!-- 头像 -->
         <el-table-column :label="$t('msg.excel.avatar')" align="center">
           <template v-slot="{ row }">
-            <img class="avatar" v-lazy :src="row.staffPhoto" alt="" srcset="">
+            <img class="avatar" v-lazy :src="row.profile" alt="" srcset="">
             <!-- <el-image class="avatar" :onerror="img" :src="row.staffPhoto" :preview-src-list="[row.staffPhoto]"> -->
             <!-- </el-image> -->
           </template>
         </el-table-column>
-        <!-- 描述 -->
+        <!-- 角色 -->
         <el-table-column align="center" :label="$t('msg.excel.role')">
           <template #default="{ row }">
-            <div v-if="row.role && row.role.length > 0">
-              <el-tag v-for="item in row.role" :key="item.id" size="small">{{
-                item.title
+            <div v-if="row.roleIds && row.roleIds.length > 0">
+              <el-tag v-for="item in row.roleIds" :key="item.id" size="small">{{
+                item.name
               }}</el-tag>
             </div>
             <div v-else>
@@ -40,7 +40,7 @@
         <!-- 时间 -->
         <el-table-column align="center" :label="$t('msg.excel.openTime')">
           <template v-slot="{ row }">
-            <span>{{ fillteTime(row.timeOfEntry) }}</span>
+            <span>{{ fillteTime(row.createTime) }}</span>
           </template>
         </el-table-column>
         <!-- 查看、角色、删除 -->
@@ -49,7 +49,7 @@
             <el-button type="primary" size="small" @click="onShowClick(row.id)">{{
               $t('msg.excel.show')
             }}</el-button>
-            <el-button type="info" size="small" @click="onShowRoleClick(row)">{{
+            <el-button type="info" size="small" @click="onShowRoleClick(row._id)">{{
               $t('msg.excel.showRole')
             }}</el-button>
             <el-button type="danger" size="small" @click="onRemove(row)">{{
@@ -60,57 +60,65 @@
       </el-table>
       <div class="pagination">
         <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="page.page"
-          :page-sizes="[2, 5, 10, 20]" :page-size="page.size" layout="total, sizes, prev, pager, next, jumper"
-          :total="100">
+          :page-sizes="[2, 5, 10, 20]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next, jumper"
+          :total="page.total">
         </el-pagination>
       </div>
     </el-card>
     <export-to-excel :page="page" v-model="exportToExcelVisible"></export-to-excel>
-    <roles-dialog v-model="roleDialogVisible"></roles-dialog>
+    <RolesDialog ref="rolesRef" v-model="roleDialogVisible" @getUserMessageList="getUserMessageList"></RolesDialog>
   </div>
 </template>
 
-<script setup>
+<script lang="ts" setup>
 import { ref, watch } from 'vue'
 import ExportToExcel from './components/Export2Excel.vue'
 import RolesDialog from './components/roles.vue'
 import { getUserList, delEmployee } from '@/api/user-manage'
 import { useRouter } from 'vue-router';
-import { ElMessageBox } from 'element-plus';
+import { ElMessage, ElMessageBox } from 'element-plus';
 import { useI18n } from 'vue-i18n';
+import { List } from './types';
 const router = useRouter()
 const i18n = useI18n()
-const page = ref({
+interface Page {
+  page: string | number;
+  pageSize: string | number;
+  total: string | number;
+}
+
+const page = ref<Page>({
   page: 1, // 当前页码
-  size: 5,
+  pageSize: 5,
   total: 0 // 总数
 })
-const list = ref([])
+
+const list = ref<List[]>([])
 const getUserMessageList = async () => {
-  const { total, rows } = await getUserList({
+  const { total, data } = await getUserList({
     page: page.value.page,
-    size: page.value.size
+    pageSize: page.value.pageSize
   })
-  page.value.total = total
-  list.value = rows
+  page.value.total = total ?? 0
+  list.value = data
 }
-getUserMessageList()
+
 // 时间处理
-const fillteTime = (time) => {
+const fillteTime = (time: string) => {
   return new Date(time).toLocaleDateString()
 }
 
-
-const handleSizeChange = currentSize => {
-  page.value.size = currentSize
+const handleSizeChange = (currentSize: number) => {
+  page.value.pageSize = currentSize
 }
-const handleCurrentChange = currentPage => {
+const handleCurrentChange = (currentPage: number) => {
   page.value.page = currentPage
 }
 
-watch(page, () => {
+watch(page.value, () => {
   getUserMessageList()
-}, { immediate: true, deep: true })
+}, { immediate: true })
+
 /**
  * excel 导入点击事件
  */
@@ -119,12 +127,12 @@ const onImportExcelClick = () => {
 }
 
 // 删除用户
-const onRemove = row => {
+const onRemove = (row: List) => {
   ElMessageBox.confirm(
     i18n.t('msg.excel.dialogTitle1') + row.username + i18n.t('msg.excel.dialogTitle2'),
     { type: 'warning' }
   ).then(async () => {
-    await delEmployee(row.id)
+    await delEmployee(row._id)
     ElMessage.success(i18n.t('msg.excel.removeSuccess'))
     getUserMessageList()
   })
@@ -139,15 +147,21 @@ const onToExcelClick = () => {
 /**
  * 查看按钮点击事件
  */
-const onShowClick = id => {
+const onShowClick = (id: string) => {
   router.push(`/user/info/${id}`)
 }
 
 /**
  * 查看角色的点击事件
  */
-const roleDialogVisible = ref(false)
-const onShowRoleClick = row => {
+const rolesRef = ref<InstanceType<typeof RolesDialog> | null>(null)// 获取子组件的实例
+const roleDialogVisible = ref<boolean>(false)
+const onShowRoleClick = (id: string) => {
+  if (rolesRef.value !== null) {
+    rolesRef.value.checkedCities = []
+    rolesRef.value.userId = id
+    rolesRef.value?.getUserDetailById(id)
+  }
   roleDialogVisible.value = true
 }
 </script>
