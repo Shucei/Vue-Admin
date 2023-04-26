@@ -33,7 +33,8 @@
       </div>
     </el-card>
     <NewRole v-model="showDialog" @getPermissionList="getPermissionList"></NewRole>
-    <AssignPermission v-model="isShowAssignPermissions" :title="title" :rows="rows"></AssignPermission>
+    <AssignPermission ref="distribution" v-model="isShowAssignPermissions" :title="title" :rows="rows">
+    </AssignPermission>
   </div>
 </template>
 
@@ -124,14 +125,14 @@ const removeRole = async (id: string) => {
 const title = ref<string>('')
 const rows = ref<List>()
 //获得子组件的实例
-// const distribution = ref<InstanceType<typeof AssignPermission>>()
+const distribution = ref<InstanceType<typeof AssignPermission>>()
 const isShowAssignPermissions = ref<boolean>(false)
 const AssignPermissions = (row: List) => {
   title.value = row.name
   rows.value = row
+  distribution.value?.getPermission()
   isShowAssignPermissions.value = true
 }
-
 </script>
 
 <style lang="scss" scoped>

@@ -11,8 +11,8 @@
     </el-form>
     <template #footer>
       <span>
-        <el-button @click="btnOK">确定</el-button>
-        <el-button type="primary" @click="btnCancel">
+        <el-button type="primary" @click="btnOK">确定</el-button>
+        <el-button @click="btnCancel">
           取消
         </el-button>
       </span>

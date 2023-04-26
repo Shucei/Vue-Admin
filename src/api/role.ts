@@ -2,7 +2,6 @@ import HyRequest from '@/utils/request'
 import { IDataType } from './types'
 enum RoleApi {
   AccountRole = '/role',
-  getLoginUser = '/user/getuser',
   deleteRole = '/role/delete/',
   addRole = '/role/add',
   assignPrem = '/role/assignPrem'
