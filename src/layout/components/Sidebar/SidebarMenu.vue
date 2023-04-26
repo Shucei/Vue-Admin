@@ -47,16 +47,19 @@ const sidebarOpened = computed(() => {
 }
 
 
-
 ::v-deep .el-menu-item:hover {
   outline: 0 !important;
   color: #fbcd31;
   background: #399ee6 !important;
+  background-image: linear-gradient(98deg, rgb(147, 221, 92), rgb(86, 202, 0) 94%);
+  box-shadow: rgba(58, 53, 65, 0.42) 0px 4px 8px -4px;
 }
 
 ::v-deep .el-menu-item.is-active {
   color: #fbcd31 !important;
   background: #399ee6 !important;
+  background-image: linear-gradient(98deg, rgb(147, 221, 92), rgb(86, 202, 0) 94%);
+  box-shadow: rgba(58, 53, 65, 0.42) 0px 4px 8px -4px;
 }
 
 ::v-deep .el-sub-menu__title:hover {

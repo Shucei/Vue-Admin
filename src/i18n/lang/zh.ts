@@ -157,7 +157,8 @@ export default {
   permission: {
     name: '权限名称',
     mark: '权限标识',
-    desc: '权限描述'
+    desc: '权限描述',
+    addPermission: '新增菜单'
   },
   article: {
     ranking: '排名',

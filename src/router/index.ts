@@ -97,14 +97,6 @@ const privateRoutes: RouteRecordRaw[] = [
           title: 'articleCreate',
           icon: 'article-create'
         }
-      },
-      {
-        path: '/article/editor/:id',
-        name: 'articleEditor',
-        component: () => import('@/views/article-create/index.vue'),
-        meta: {
-          title: 'articleEditor'
-        }
       }
     ]
   }

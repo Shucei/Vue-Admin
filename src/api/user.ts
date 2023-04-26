@@ -60,6 +60,10 @@ export const getUserInfoById = (params?: GuserId) =>
 export const getUserDetailByIdApi = (id: string) =>
   HyRequest.get<IDataType>({ url: LoginApi.getUserDetailById, params: { id } })
 
+/**
+ * 给用户分配角色
+ * @param data
+ * */
 export const setUserassignRolesApi = (data: any) =>
   HyRequest.put<IDataType>({
     url: LoginApi.setUserassignRolesId,

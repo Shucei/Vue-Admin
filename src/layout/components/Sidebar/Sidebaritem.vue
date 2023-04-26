@@ -38,9 +38,4 @@ const props = defineProps({
 // .el-menu-item {
 //   display: block !important;
 // }
-
-
-// ::v-deep .el-sub-menu {
-//   width: 100px !important;
-// // }
 </style>

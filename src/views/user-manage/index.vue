@@ -1,13 +1,13 @@
 <template>
   <div class="user-manage-container">
-    <el-card class="header">
-      <div>
+    <PageTools :showBefore=false>
+      <template #after>
         <el-button type="primary" @click="onImportExcelClick"> {{ $t('msg.excel.importExcel') }}</el-button>
         <el-button type="success" @click="onToExcelClick">
           {{ $t('msg.excel.exportExcel') }}
         </el-button>
-      </div>
-    </el-card>
+      </template>
+    </PageTools>
     <el-card>
       <el-table :data="list" border style="width: 100%">
         <el-table-column align="center" label="#" type="index" width="100" />
@@ -172,10 +172,7 @@ const onShowRoleClick = (id: string) => {
 }
 
 .user-manage-container {
-  .header {
-    margin-bottom: 22px;
-    text-align: right;
-  }
+
 
   ::v-deep .avatar {
     width: 60px;

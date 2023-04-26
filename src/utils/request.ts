@@ -10,7 +10,14 @@ import type {
   InternalAxiosRequestConfig,
   AxiosResponse
 } from 'axios'
-
+const whiteList = [
+  '获取角色列表成功',
+  '获取用户列表成功',
+  '获取菜单列表成功',
+  '获取权限列表成功',
+  '获取成功',
+  '获取权限点成功'
+]
 // 拦截器
 interface HyRequestInterceptors<T = AxiosResponse> {
   requestInterceptor?: (
@@ -99,13 +106,8 @@ class hyRequest {
       (config) => {
         nprogress.done()
         const { status, message, data, total } = config.data
-        if (
-          message !== '获取角色列表成功' &&
-          message !== '获取用户列表成功' &&
-          message !== '获取菜单列表成功' &&
-          message !== '获取权限列表成功' &&
-          message !== '获取成功'
-        ) {
+
+        if (!whiteList.includes(message)) {
           if (status >= 200 && status < 400) {
             ElMessage({
               message: message,
@@ -114,7 +116,7 @@ class hyRequest {
             })
           } else {
             ElMessage({
-              message: '用户不存在',
+              message: message,
               type: 'warning',
               duration: 1500
             })
@@ -127,17 +129,22 @@ class hyRequest {
       (err) => {
         nprogress.done()
         // 判断后端token过期日期，被动处理token过期
-        console.log(err)
-        if (err.response && err.response.data.status === 401) {
+        if (
+          err.response &&
+          err.response.data.status === 401 &&
+          err.response.data.error[0].msg === '身份验证失败'
+        ) {
           store.dispatch('user/logout') // 登出action 删除token
           router.push('/login')
           ElMessage({
-            message: err.response.data.error[0].msg,
+            message:
+              err.response.data.error[0].msg ||
+              err.response.data.error[0].message,
             type: 'error',
-            duration: 2000
+            duration: 1500
           })
         } else {
-          ElMessage.error(err.message) // 提示错误信息
+          ElMessage.error(err.response.data.error[0].msg) // 提示错误信息
         }
         return err
       }
