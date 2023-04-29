@@ -5,20 +5,20 @@
   </el-menu>
 </template>
 <script lang="ts" setup>
-import { computed } from 'vue'
+import { computed, toRaw } from 'vue'
 import { useRouter, useRoute, RouteRecordRaw } from 'vue-router';
 import { filterRouters, generateMenus } from '@/utils/route'
 import SidebarItem from './Sidebaritem.vue'
 import { useStore } from 'vuex';
 const router = useRouter()
 // 计算 menu 的方法
-
+const store = useStore()
 const routes = computed<RouteRecordRaw[]>(() => {
   // 用于过滤掉不需要显示在 menu 上的路由
   // 例如：404、login、redirect 等
   // 你可以根据自己的需求自定义
   const filterRoutes = filterRouters(router.getRoutes())
-  return generateMenus(filterRoutes, '', ['user', 'home', 'profile', 'article'])
+  return generateMenus(filterRoutes, '')
 })
 // 计算高亮 menu 的方法
 const route = useRoute()
@@ -27,7 +27,6 @@ const activeMenu = computed<string>(() => {
   return path
 })
 
-const store = useStore()
 const cssVar = computed(() => {
   return {
     menuBg: store.getters.cssVar.menuBg,

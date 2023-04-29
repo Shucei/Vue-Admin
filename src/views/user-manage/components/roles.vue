@@ -1,7 +1,7 @@
 <template>
   <el-dialog :title="$t('msg.excel.roleDialogTitle')" :model-value="modelValue" @close="closed">
     <el-checkbox-group v-model="checkedCities">
-      <el-checkbox v-for="city in cities" :key="city._id" :label="city">{{
+      <el-checkbox v-for="city in cities" :key="city._id" :label="city._id">{{
         city.name
       }}</el-checkbox>
     </el-checkbox-group>
@@ -18,7 +18,7 @@
 
 <script lang="ts" setup>
 import { getRoleList } from '@/api/role';
-import { getUserDetailByIdApi, setUserassignRolesApi } from '@/api/user';
+import { setUserassignRolesApi } from '@/api/user';
 import { defineProps, defineEmits, ref, watch } from 'vue'
 
 const props = defineProps<{
@@ -44,26 +44,19 @@ const getPermissionList = async () => {
   })
   cities.value = data
 }
-// getPermissionList()
 
 /**
  * 选中的角色
+ * 角色可以只存储id，这里之所以拿到整个对象时因为渲染时需要用到name，所以直接存储整个对象
  */
-const checkedCities = ref([])
+const checkedCities = ref<any[]>([])
 
-/**
- * 获取指定用户角色
- */
-const getUserDetailById = async (id: string) => {
-  const { data } = await getUserDetailByIdApi(id)
-  checkedCities.value = data.roleIds || [] // 赋值本用户的角色
-}
+
 
 /**
 * 确定按钮点击事件
 */
 const onConfirm = async () => {
-  console.log(userId.value, checkedCities.value);
   await setUserassignRolesApi({
     userId: userId.value,
     roleIds: checkedCities.value
@@ -88,7 +81,6 @@ watch(() => props.modelValue, (val) => {
 
 // 暴露给父组件的方法
 defineExpose({
-  getUserDetailById, // 获取指定用户角色
   userId, // 用户id
   checkedCities
 })

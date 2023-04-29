@@ -1,5 +1,6 @@
 import router from './router'
 import store from './store'
+import { RouteRecordRaw } from 'vue-router'
 import type { RouteLocationNormalized, NavigationGuardNext } from 'vue-router'
 // 白名单
 const whiteList = ['/login']
@@ -19,7 +20,15 @@ router.beforeEach(
       } else {
         if (!store.getters.hasUserInfo) {
           try {
-            await store.dispatch('user/getUserInfo')
+            const { role } = await store.dispatch('user/getUserInfo')
+            const newRoutes = await store.dispatch(
+              'permission/filterRoutes',
+              role.menus
+            )
+            newRoutes.forEach((element: any) => {
+              router.addRoute(element)
+            })
+            return next(to.path)
           } catch (error) {
             console.error('Failed to get user info:', error)
           }

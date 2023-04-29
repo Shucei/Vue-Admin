@@ -53,14 +53,6 @@ export const getUserInfoById = (params?: GuserId) =>
   HyRequest.get<IDataType<UserInfo>>({ url: LoginApi.getLoginUser, params })
 
 /**
- * 获取用户基本信息
- * @param id
- * @returns
- */
-export const getUserDetailByIdApi = (id: string) =>
-  HyRequest.get<IDataType>({ url: LoginApi.getUserDetailById, params: { id } })
-
-/**
  * 给用户分配角色
  * @param data
  * */

@@ -1,105 +1,21 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router'
-
+import articleCreate from './modules/articleCreate'
+import articleRanking from './modules/articleRanking'
+import permissionList from './modules/permissionList'
+import roleList from './modules/roleList'
+import userManage from './modules/userManage'
 import layout from '@/layout/index.vue'
+import store from '@/store'
 /**
  * 私有路由表
  */
 
-const privateRoutes: RouteRecordRaw[] = [
-  {
-    path: '/user',
-    component: layout,
-    name: 'user',
-    redirect: '/user/manage',
-    meta: {
-      title: 'user',
-      icon: 'personnel'
-    },
-    children: [
-      {
-        path: '/user/manage',
-        name: 'userManage',
-        component: () => import('@/views/user-manage/index.vue'),
-        meta: {
-          title: 'userManage',
-          icon: 'personnel-manage'
-        }
-      },
-      {
-        path: '/user/role',
-        name: 'roleList',
-        component: () => import('@/views/role-list/index.vue'),
-        meta: {
-          title: 'roleList',
-          icon: 'role'
-        }
-      },
-      {
-        path: '/user/permission',
-        name: 'permissionList',
-        component: () => import('@/views/permission-list/index.vue'),
-        meta: {
-          title: 'permissionList',
-          icon: 'permission'
-        }
-      },
-      {
-        path: '/user/info/:id',
-        name: 'userInfo',
-        component: () => import('@/views/user-info/index.vue'),
-        props: true,
-        meta: {
-          title: 'userInfo'
-        }
-      },
-      {
-        path: '/user/import',
-        name: 'import',
-        component: () => import('@/views/import/index.vue'),
-        meta: {
-          title: 'excelImport'
-        }
-      }
-    ]
-  },
-  {
-    path: '/article',
-    component: layout,
-    name: 'article',
-    redirect: '/article/ranking',
-    meta: {
-      title: 'article',
-      icon: 'article'
-    },
-    children: [
-      {
-        path: '/article/ranking',
-        name: 'articleRanking',
-        component: () => import('@/views/article-ranking/index.vue'),
-        meta: {
-          title: 'articleRanking',
-          icon: 'article-ranking'
-        }
-      },
-      {
-        path: '/article/:id',
-        name: 'articleDetail',
-        component: () => import('@/views/article-detail/index.vue'),
-        meta: {
-          title: 'articleDetail'
-        }
-      },
-      {
-        path: '/article/create',
-        name: 'articleCreate',
-        component: () => import('@/views/article-create/index.vue'),
-        meta: {
-          title: 'articleCreate',
-          icon: 'article-create'
-        }
-      }
-    ]
-  }
+export const privateRoutes: RouteRecordRaw[] = [
+  articleCreate,
+  articleRanking,
+  permissionList,
+  roleList,
+  userManage
 ]
 
 const publicRoutes: RouteRecordRaw[] = [
@@ -120,7 +36,23 @@ const publicRoutes: RouteRecordRaw[] = [
           title: 'home',
           icon: 'home'
         }
-      },
+      }
+      // {
+      //   path: '/profile',
+      //   name: 'profile',
+      //   component: () => import('@/views/profile/index.vue'),
+      //   meta: {
+      //     title: 'profile',
+      //     icon: 'individual'
+      //   }
+      // }
+    ]
+  },
+  {
+    path: '/',
+    redirect: '/profile',
+    component: layout,
+    children: [
       {
         path: '/profile',
         name: 'profile',
@@ -138,11 +70,21 @@ const publicRoutes: RouteRecordRaw[] = [
   }
 ]
 
-const routes: RouteRecordRaw[] = [...publicRoutes, ...privateRoutes]
+const routes: RouteRecordRaw[] = publicRoutes
 
 const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
   routes
 })
+
+// 重置路由
+export function resetRouter() {
+  if (store.getters.userInfo && store.getters.userInfo.role.menus) {
+    const menus = store.getters.userInfo.role.menus
+    menus.forEach((element: any) => {
+      router.hasRoute(element) && router.removeRoute(element) // 删除路由
+    })
+  }
+}
 
 export default router

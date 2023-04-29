@@ -27,9 +27,9 @@
         <!-- 角色 -->
         <el-table-column align="center" :label="$t('msg.excel.role')">
           <template #default="{ row }">
-            <div v-if="row.roleIds && row.roleIds.length > 0">
-              <el-tag v-for="item in row.roleIds" :key="item.id" size="small">{{
-                item.name
+            <div v-if="row.roleName && row.roleName.length > 0">
+              <el-tag v-for="item in row.roleName" :key="item" size="small">{{
+                item
               }}</el-tag>
             </div>
             <div v-else>
@@ -49,7 +49,7 @@
             <el-button type="primary" size="small" @click="onShowClick(row.id)">{{
               $t('msg.excel.show')
             }}</el-button>
-            <el-button type="info" size="small" @click="onShowRoleClick(row._id)">{{
+            <el-button type="info" size="small" @click="onShowRoleClick(row)">{{
               $t('msg.excel.showRole')
             }}</el-button>
             <el-button type="danger" size="small" @click="onRemove(row)">{{
@@ -156,11 +156,11 @@ const onShowClick = (id: string) => {
  */
 const rolesRef = ref<InstanceType<typeof RolesDialog> | null>(null)// 获取子组件的实例
 const roleDialogVisible = ref<boolean>(false)
-const onShowRoleClick = (id: string) => {
+const onShowRoleClick = (row: any) => {
   if (rolesRef.value !== null) {
     rolesRef.value.checkedCities = []
-    rolesRef.value.userId = id
-    rolesRef.value?.getUserDetailById(id)
+    rolesRef.value.userId = row._id
+    rolesRef.value.checkedCities = row.roleIds
   }
   roleDialogVisible.value = true
 }

@@ -44,7 +44,6 @@ declare module '@vue/runtime-core' {
     ElTabs: typeof import('element-plus/es')['ElTabs']
     ElTag: typeof import('element-plus/es')['ElTag']
     ElTooltip: typeof import('element-plus/es')['ElTooltip']
-    ElTree: typeof import('element-plus/es')['ElTree']
     Guide: typeof import('./src/components/Guide/index.vue')['default']
     Hamburger: typeof import('./src/components/hamburger.vue')['default']
     HeaderSearch: typeof import('./src/components/headerSearch/index.vue')['default']

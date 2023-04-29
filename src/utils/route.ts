@@ -41,11 +41,7 @@ function isNull(data: any) {
 /**
  * 根据 routes 数据，返回对应 menu 规则数组
  */
-export function generateMenus(
-  routes: RouteRecordRaw[],
-  basePath = '',
-  permison?: string[]
-) {
+export function generateMenus(routes: RouteRecordRaw[], basePath = '') {
   const result: RouteRecordRaw[] = []
 
   // 遍历路由表
@@ -82,11 +78,11 @@ export function generateMenus(
 
   //通过permison实现权限过滤
   // 这种方式的好处是，可以在路由生成时就进行权限过滤，减少了运行时的计算量，提高了性能。而动态添加路由的方式，需要在运行时进行路由的添加和删除，相对来说会更加复杂一些。
-  if (permison) {
-    const res = result.filter((item) => {
-      return permison.includes(item.name as string)
-    })
-    return res
-  }
+  // if (permison) {
+  //   const res = result.filter((item) => {
+  //     return permison.includes(item.name as string)
+  //   })
+  //   return res
+  // }
   return result
 }
