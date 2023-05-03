@@ -1,3 +1,4 @@
+// 自定义校验规则
 import i18n from '@/i18n'
 export const validatePassword = () => {
   return (rule: any, value: any, callback: any) => {

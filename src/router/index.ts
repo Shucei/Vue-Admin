@@ -36,23 +36,7 @@ const publicRoutes: RouteRecordRaw[] = [
           title: 'home',
           icon: 'home'
         }
-      }
-      // {
-      //   path: '/profile',
-      //   name: 'profile',
-      //   component: () => import('@/views/profile/index.vue'),
-      //   meta: {
-      //     title: 'profile',
-      //     icon: 'individual'
-      //   }
-      // }
-    ]
-  },
-  {
-    path: '/',
-    redirect: '/profile',
-    component: layout,
-    children: [
+      },
       {
         path: '/profile',
         name: 'profile',
@@ -64,17 +48,34 @@ const publicRoutes: RouteRecordRaw[] = [
       }
     ]
   },
+  // {
+  //   path: '/profile',
+  //   name: 'profile',
+  //   // redirect: '/profile',
+  //   component: layout,
+  //   children: [
+  //     {
+  //       path: '/profile',
+  //       name: 'profile',
+  //       component: () => import('@/views/profile/index.vue'),
+  //       meta: {
+  //         title: 'profile',
+  //         icon: 'individual'
+  //       }
+  //     }
+  //   ]
+  // },
   {
     path: '/404',
-    component: () => import('@/views/404.vue')
+    name: '404',
+    component: () =>
+      import(/* webpackChunkName: "error-page" */ '@/views/404.vue')
   }
 ]
 
-const routes: RouteRecordRaw[] = publicRoutes
-
 const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
-  routes
+  routes: publicRoutes
 })
 
 // 重置路由
@@ -84,6 +85,7 @@ export function resetRouter() {
     menus.forEach((element: any) => {
       router.hasRoute(element) && router.removeRoute(element) // 删除路由
     })
+    router.push('/')
   }
 }
 

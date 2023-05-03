@@ -21,10 +21,12 @@ const getChildrenRoutes = (routes: RouteRecordRaw[]) => {
  */
 export const filterRouters = (routes: RouteRecordRaw[]) => {
   const childrenRoutes = getChildrenRoutes(routes)
+  console.log(childrenRoutes)
+
   return routes.filter((route) => {
     return !childrenRoutes.find((childrenRoute) => {
-      return childrenRoute.path === route.path
-    })
+      return childrenRoute.path === route.path // 子路由存在一级路由，则剔除该一级路由
+    }) // 不存在子路由的一级路由,则保留,存在则剔除
   })
 }
 
@@ -43,7 +45,6 @@ function isNull(data: any) {
  */
 export function generateMenus(routes: RouteRecordRaw[], basePath = '') {
   const result: RouteRecordRaw[] = []
-
   // 遍历路由表
   routes.forEach((item) => {
     // 不存在 children && 不存在 meta 直接 return

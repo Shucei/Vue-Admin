@@ -16,6 +16,7 @@ import color from 'css-color-function' // 引入用于计算颜色的库
 interface IColor {
   [key: string]: string
 }
+
 // 将颜色计算公式转为typescript的类型
 const formulas: IColor = formula
 
@@ -31,7 +32,7 @@ export const generateNewStyle = async (
   let cssText = await getOriginalStyle()
   // 3、遍历生成的色值表，在默认样式表里进行全局替换
   Object.entries(colors).forEach(([key, value]) => {
-    cssText = cssText.replace(new RegExp('(:|\\s+)' + key, 'g'), '$1' + value)
+    cssText = cssText.replace(new RegExp('(:|\\s+)' + key, 'g'), '$1' + value) // 将默认样式表中的颜色值替换为生成的颜色值
   })
   return cssText
 }
@@ -41,11 +42,14 @@ export const generateNewStyle = async (
  * @param {*} primary 主题色
  * @returns {Object} 包含主题色和其他颜色的对象
  */
-export const generateColors = (primary: string): { [key: string]: string } => {
+export const generateColors = (
+  primary: string = '#409eff'
+): { [key: string]: string } => {
   const colors: { [key: string]: string } = {
     primary // 将传入的主题色添加到颜色表中
   }
   // 遍历颜色计算公式，将primary替换为实际的主题色，并计算出对应的颜色值
+  // entries() 方法返回一个数组的迭代对象，该对象包含数组的键值对 (key/value)。
   Object.entries(formulas).forEach(([key, value]) => {
     colors[key] =
       '#' + rgbHex(color.convert(value.replace(/primary/g, primary))) // 将计算出的颜色值转为16进制

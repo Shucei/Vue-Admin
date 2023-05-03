@@ -8,9 +8,8 @@
       <menu-item :title="route.meta.title" :icon="route.meta.icon"></menu-item>
     </template>
     <el-menu-item v-for="item in route.children" :key="item.path" :index="item.path" :route="item">
-      {{
-        generateTitle(item.meta?.title)
-      }}</el-menu-item>
+      <menu-item :title="item.meta.title" :icon="item.meta.icon"></menu-item>
+    </el-menu-item>
   </el-sub-menu>
 
   <el-menu-item v-else :index="route.path">

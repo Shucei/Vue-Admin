@@ -18,6 +18,10 @@ const routes = computed<RouteRecordRaw[]>(() => {
   // 例如：404、login、redirect 等
   // 你可以根据自己的需求自定义
   const filterRoutes = filterRouters(router.getRoutes())
+  console.log(router.getRoutes());
+  console.log(filterRoutes);
+  console.log(generateMenus(filterRoutes, ''));
+
   return generateMenus(filterRoutes, '')
 })
 // 计算高亮 menu 的方法
