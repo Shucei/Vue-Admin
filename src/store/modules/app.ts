@@ -72,6 +72,9 @@ export default {
         )
       }
       LocalCache.setItem(TAGS_VIEW, state.tagsViewList)
+    },
+    resetTagsView(state: AppState) {
+      state.tagsViewList = []
     }
   },
   actions: {}

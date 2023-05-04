@@ -2,7 +2,7 @@ import { Module } from 'vuex'
 import { getUserInfoById, login as submitLogin } from '@/api/user'
 import LocalCache from '@/utils/storage'
 import { resetRouter } from '@/router'
-import { TAGS_VIEW } from '@/constant'
+
 export interface IRootState {
   token: string
   userInfo: any
@@ -52,7 +52,6 @@ const LoginUser: Module<IRootState, any> = {
       context.commit('setToken', '')
       resetRouter()
       context.commit('setUserInfo', {})
-      LocalCache.setItem(TAGS_VIEW, [])
     }
   }
 }

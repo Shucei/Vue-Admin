@@ -2,9 +2,9 @@
   <div class="tags-view-container">
     <el-scrollbar class="tags-view-wrapper">
       <router-link class="tags-view-item" :class="isActive(tag) ? 'active' : ''" :style="{
-        backgroundColor: isActive(tag) ? $store.getters.cssVar.menuBg : '',
-        borderColor: isActive(tag) ? $store.getters.cssVar.menuBg : ''
-      }" v-for="(tag, index) in $store.getters.tagsViewList" :key="tag.fullPath" :to="{ path: tag.fullPath }"
+          backgroundColor: isActive(tag) ? $store.getters.cssVar.menuBg : '',
+          borderColor: isActive(tag) ? $store.getters.cssVar.menuBg : ''
+        }" v-for="(tag, index) in tagsViewList" :key="tag.fullPath" :to="{ path: tag.fullPath }"
         @contextmenu.prevent="openMenu($event, index)">
         {{ tag.title }}
         <svg-icon @click.prevent.stop="onCloseClick(index)" v-show="!isActive(tag)" class="delete"
@@ -16,11 +16,16 @@
 </template>
 
 <script setup>
-import { ref, reactive, watch } from 'vue';
+import { ref, reactive, watch, computed } from 'vue';
 import ContextMenu from './ContextMenu.vue'
 import { useRoute } from 'vue-router'
 import { useStore } from 'vuex';
 const route = useRoute()
+const store = useStore()
+
+const tagsViewList = computed(() => {
+  return store.getters.tagsViewList
+})
 
 /**
  * 是否被选中
@@ -32,7 +37,6 @@ const isActive = tag => {
 /**
  * 关闭 tag 的点击事件
  */
-const store = useStore()
 const onCloseClick = index => {
   store.commit('app/removeTagsView', {
     type: 'index',

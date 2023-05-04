@@ -11,11 +11,11 @@ import store from '@/store'
  */
 
 export const privateRoutes: RouteRecordRaw[] = [
-  articleCreate,
-  articleRanking,
-  permissionList,
+  userManage,
   roleList,
-  userManage
+  permissionList,
+  articleCreate,
+  articleRanking
 ]
 
 const publicRoutes: RouteRecordRaw[] = [

@@ -22,7 +22,7 @@
             <router-link to="/">
               <el-dropdown-item> {{ $t('msg.navBar.home') }} </el-dropdown-item>
             </router-link>
-            <a target="_blank">
+            <a target="_blank" href="https://github.com/Shucei/Vue-Admin">
               <el-dropdown-item>{{ $t('msg.navBar.course') }}</el-dropdown-item>
             </a>
             <el-dropdown-item @click="Logout" divided>
@@ -31,6 +31,10 @@
           </el-dropdown-menu>
         </template>
       </el-dropdown>
+      <!-- 用户名 -->
+      <div class="username">
+        {{ $store.state.user.userInfo.username }}
+      </div>
     </div>
   </div>
 </template>
@@ -49,6 +53,7 @@ const store = useStore()
 const router = useRouter()
 const Logout = () => {
   store.dispatch('user/logout')
+  store.commit('app/resetTagsView')
   router.push('/login')
 }
 </script>
@@ -128,5 +133,12 @@ const Logout = () => {
       }
     }
   }
+}
+
+.username {
+  display: inline-block;
+  vertical-align: text-bottom;
+  margin-top: 10px;
+  color: #5a5e66;
 }
 </style>

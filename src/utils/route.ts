@@ -21,8 +21,6 @@ const getChildrenRoutes = (routes: RouteRecordRaw[]) => {
  */
 export const filterRouters = (routes: RouteRecordRaw[]) => {
   const childrenRoutes = getChildrenRoutes(routes)
-  console.log(childrenRoutes)
-
   return routes.filter((route) => {
     return !childrenRoutes.find((childrenRoute) => {
       return childrenRoute.path === route.path // 子路由存在一级路由，则剔除该一级路由
