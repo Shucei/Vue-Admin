@@ -32,7 +32,8 @@ export default {
     articleRanking: '文章排名',
     articleCreate: '创建文章',
     articleDetail: '文章详情',
-    articleEditor: '文章编辑'
+    articleEditor: '文章编辑',
+    message: '消息'
   },
   toast: {
     switchLangSuccess: '切换语言成功'
@@ -181,5 +182,9 @@ export default {
     createSuccess: '文章创建成功',
     editorSuccess: '文章修改成功',
     sortSuccess: '文章排名修改成功'
+  },
+  message: {
+    chats: '聊天',
+    group: '群组'
   }
 }

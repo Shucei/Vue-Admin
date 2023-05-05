@@ -32,7 +32,8 @@ export default {
     articleRanking: 'ArticleRanking',
     articleCreate: 'ArticleCreate',
     articleDetail: 'ArticleDetail',
-    articleEditor: 'ArticleEditor'
+    articleEditor: 'ArticleEditor',
+    message: 'Message'
   },
   toast: {
     switchLangSuccess: 'Switch Language Success'
@@ -181,5 +182,9 @@ export default {
     createSuccess: 'The article was created successfully',
     editorSuccess: 'Article modified successfully',
     sortSuccess: 'Article ranking modified successfully'
+  },
+  message: {
+    chats: 'Chats',
+    group: 'Group'
   }
 }

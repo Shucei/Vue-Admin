@@ -47,7 +47,7 @@ import breadcrumb from '@/components/Breadcrumb/index.vue'
 import LangSelect from '@/components/LangSelect'
 import ThemePicker from '@/components/ThemeSelect/index.vue'
 import Screenfull from '@/components/Screenfull'
-import headerSearch from '@/components/headerSearch/index';
+import headerSearch from '@/components/headerSearch/index.vue';
 import Guide from '@/components/Guide'
 const store = useStore()
 const router = useRouter()

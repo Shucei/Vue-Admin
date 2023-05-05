@@ -45,6 +45,15 @@ const publicRoutes: RouteRecordRaw[] = [
           title: 'profile',
           icon: 'individual'
         }
+      },
+      {
+        path: '/message',
+        name: 'message',
+        component: () => import('@/views/message/index.vue'),
+        meta: {
+          title: 'message',
+          icon: 'message2'
+        }
       }
     ]
   },

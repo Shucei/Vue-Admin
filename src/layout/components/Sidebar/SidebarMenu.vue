@@ -5,7 +5,7 @@
   </el-menu>
 </template>
 <script lang="ts" setup>
-import { computed, toRaw } from 'vue'
+import { computed } from 'vue'
 import { useRouter, useRoute, RouteRecordRaw } from 'vue-router';
 import { filterRouters, generateMenus } from '@/utils/route'
 import SidebarItem from './Sidebaritem.vue'

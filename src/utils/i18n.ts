@@ -6,7 +6,7 @@ import i18n from '@/i18n'
 import { watch } from 'vue'
 
 export function generateTitle(title: string): string {
-  return i18n.global.t('msg.route.' + title)
+  return i18n.global.t('msg.route.' + title) // 通过i18n的global属性访问全局翻译
 }
 
 /**
