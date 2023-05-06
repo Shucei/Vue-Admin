@@ -1,6 +1,6 @@
 <template>
-  <div class="messagelist">
-    <div class="search">
+  <div class="messagelist ">
+    <div class="search ">
       <el-input v-model="input" placeholder="请输入关键字" :prefix-icon="Search" size="large" />
       <div class="icon">
         <span>147</span>
@@ -33,31 +33,9 @@ const input = ref('');
 </script>
 
 <style lang="scss" scoped>
-// ::v-deep #pane-first {
-//    perspective: 1000px;
-// }
-
-.messagelist::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
-}
-
-.messagelist::-webkit-scrollbar-thumb {
-  border-radius: 3px;
-  -moz-border-radius: 3px;
-  -webkit-border-radius: 3px;
-  background-color: #fba414;
-}
-
-.messagelist::-webkit-scrollbar-track {
-  background-color: transparent;
-}
-
-.messagelist {
-  width: 25%;
-  // min-height: calc(100vh - 50px - 74px);
+::v-deep #pane-first {
+  //  perspective: 1000px;
   max-height: calc(100vh - 50px - 74px); // 你可以设置固定或者最大最小高度
-  text-align: left;
   overflow: hidden; // 隐藏超出部分
   overflow-y: scroll; // 设置纵向滚动效果，x为横向
 
@@ -66,20 +44,37 @@ const input = ref('');
     height: 6px;
   }
 
-  // &::-webkit-scrollbar-thumb {
-  //   border-radius: 3px;
-  //   -moz-border-radius: 3px;
-  //   -webkit-border-radius: 3px;
-  //   background-color: rgba(251, 164, 20, .6)
-  // }
+  &:hover {
+    &::-webkit-scrollbar {
+      width: 3px;
+      height: 6px;
+    }
 
-  // &::-webkit-scrollbar-track {
-  //   background-color: transparent;
-  // }
+    &::-webkit-scrollbar-thumb {
+      border-radius: 3px;
+      -moz-border-radius: 3px;
+      -webkit-border-radius: 3px;
+      background-color: rgba(251, 164, 20, .6)
+    }
+
+    &::-webkit-scrollbar-track {
+      background-color: transparent;
+    }
+  }
+
+  padding-bottom: 88px;
+}
+
+
+
+.messagelist {
+  width: 25%;
+  // min-height: calc(100vh - 50px - 74px);
+  max-height: calc(100vh - 50px - 74px); // 你可以设置固定或者最大最小高度
+  text-align: left;
 
 
   .search {
-
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -113,14 +108,13 @@ const input = ref('');
   width: 290px;
   box-shadow: 0 2px 4px 0 rgba(0, 0, 0, .1) inset;
   border-radius: 24px;
-  flex: 1;
 
   ::v-deep .el-input__wrapper {
     width: 50px;
     height: 40px;
     border-radius: 24px;
     background-color: rgba(201, 196, 196, 0.1);
-    box-shadow: none;
+    // box-shadow: none;
   }
 }
 

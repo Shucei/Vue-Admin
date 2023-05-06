@@ -49,6 +49,7 @@ declare module '@vue/runtime-core' {
     Hamburger: typeof import('./src/components/hamburger.vue')['default']
     HeaderSearch: typeof import('./src/components/headerSearch/index.vue')['default']
     LangSelect: typeof import('./src/components/LangSelect/index.vue')['default']
+    MessageWindow: typeof import('./src/components/MessageWindow/index.vue')['default']
     PageTools: typeof import('./src/components/PageTools/index.vue')['default']
     PanThumb: typeof import('./src/components/PanThumb/index.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']

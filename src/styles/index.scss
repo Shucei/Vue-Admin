@@ -55,3 +55,64 @@ div:focus {
     height: 0;
   }
 }
+
+// 聊天页面头像及在线状态公共部分
+.message-left {
+  position: relative;
+  display: flex;
+  align-items: center;
+  flex: 1;
+
+  img {
+    width: 46px;
+    height: 39.02px;
+    border-radius: 50%;
+    margin-right: 15px;
+  }
+
+  .name {
+    width: 72px;
+    height: 22px;
+    /** 文本1 */
+    font-size: 18px;
+    font-weight: 400;
+    letter-spacing: 0px;
+    line-height: 22px;
+    color: rgba(24, 28, 47, 1);
+    text-align: left;
+    vertical-align: top;
+  }
+
+  .time {
+    width: 28px;
+    height: 22px;
+    opacity: 0.4;
+    /** 文本1 */
+    font-size: 14px;
+    font-weight: 400;
+    letter-spacing: 0px;
+    line-height: 22px;
+    color: rgba(24, 28, 47, 1);
+    text-align: left;
+    vertical-align: top
+  }
+
+  .Online_status {
+    opacity: 1;
+    color: rgba(52, 216, 89, 1);
+  }
+
+  &::after {
+    position: absolute;
+    content: '';
+    left: -3px;
+    top: 1px;
+    width: 16px;
+    height: 13.57px;
+    // border-radius: 50%;
+    // border: 3.5px solid rgba(255, 255, 255, 1);
+    // background: rgba(52, 216, 89, 1);
+    border-radius: 50%;
+    background: -webkit-radial-gradient(circle closest-side, rgba(52, 216, 89, 1) 50%, rgba(255, 255, 255, 1) 60%);
+  }
+}

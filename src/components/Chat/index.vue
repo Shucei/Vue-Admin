@@ -1,11 +1,12 @@
 <template>
-  <div class="chat active">
+  <!-- active -->
+  <div class="chat">
     <div class="top">
-      <div class="left">
+      <div class="message-left">
         <img src="https://i.gtimg.cn/club/item/face/img/2/16022_100.gif" alt="用户头像">
         <div class="username">
           <div class="name">Shu</div>
-          <div class="time Online_status">线上</div>
+          <div class="time Online_status">在线</div>
         </div>
       </div>
       <div class="right">
@@ -25,10 +26,11 @@
 
 <style lang="scss" scoped>
 .chat {
+  position: relative;
   display: flex;
   flex-direction: column;
   justify-content: space-evenly;
-  width: 362px;
+  width: 355px;
   height: 121px;
   margin-top: 10px;
   margin-bottom: 10px;
@@ -39,10 +41,16 @@
   /* 开启透视 */
   // perspective: 1000px;
   // transform-style: preserve-3d;
+  cursor: pointer;
+  margin-left: 1px;
 
   &:hover {
     transform: translateY(-7px);
+    box-shadow: rgba(17, 17, 26, 0.05) 0px 1px 0px, rgba(17, 17, 26, 0.1) 0px 0px 8px,
+      rgba(17, 17, 26, 0.1) 0px 20px 30px;
+    background-color: rgba(233, 242, 255, 0.5);
   }
+
 
 
 
@@ -50,52 +58,6 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-
-
-    .left {
-      display: flex;
-      align-items: center;
-      flex: 1;
-
-      img {
-        width: 46px;
-        height: 39.02px;
-        border-radius: 50%;
-        margin-right: 15px;
-      }
-
-      .name {
-        width: 72px;
-        height: 22px;
-        /** 文本1 */
-        font-size: 18px;
-        font-weight: 400;
-        letter-spacing: 0px;
-        line-height: 22px;
-        color: rgba(24, 28, 47, 1);
-        text-align: left;
-        vertical-align: top;
-      }
-
-      .time {
-        width: 28px;
-        height: 22px;
-        opacity: 0.3;
-        /** 文本1 */
-        font-size: 14px;
-        font-weight: 400;
-        letter-spacing: 0px;
-        line-height: 22px;
-        color: rgba(24, 28, 47, 1);
-        text-align: left;
-        vertical-align: top;
-      }
-
-      .Online_status {
-        opacity: 1;
-        color: rgba(52, 216, 89, 1);
-      }
-    }
 
     .right {
 
