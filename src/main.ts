@@ -14,7 +14,13 @@ import lazyPlugin from '@/directive/index' // 图片懒加载
 import i18n from '@/i18n/index'
 import installElementPlus from '@/plugins/elememt'
 
+// websocket
+// import WebSocketService from './plugins/ws-socket'
+// const socketService = new WebSocketService('ws://localhost:3000')
+// socketService.connect()
+
 const app = createApp(App)
+// app.config.globalProperties.$socketService = socketService
 app.use(global)
 app.use(store)
 app.use(i18n)

@@ -1,5 +1,5 @@
 <template>
-  <div class="userinfo">
+  <div class="userinfo" v-if="modelValue">
     <div class="user">
       <div class="userimg">
         <img src="https://i.gtimg.cn/club/item/face/img/2/16022_100.gif" alt="">
@@ -58,14 +58,22 @@
     <el-button type="danger">删除好友</el-button>
 
     <!-- 关闭 -->
-    <el-button :icon="CloseBold" class="close"></el-button>
+    <el-button :icon="CloseBold" class="close" @click="closeUserInfo"></el-button>
   </div>
 </template>
 
 <script lang="ts" setup>
+import { defineProps, defineEmits } from 'vue'
 import { CloseBold } from '@element-plus/icons-vue'
+const props = defineProps<{
+  modelValue: boolean
+}>();
 
+const emit = defineEmits(['update:modelValue']);
 
+const closeUserInfo = () => {
+  emit('update:modelValue', false)
+}
 </script>
 
 <style lang="scss" scoped>

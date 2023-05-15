@@ -38,8 +38,7 @@
     "skipLibCheck": true,
     "paths": {
       "@/*": ["src/*"]
-    },
-    
+    }
   },
   "exclude": ["node_modules"],
   // ts 编译器编译覆盖的范围。
@@ -50,6 +49,10 @@
     "src/**/*.vue",
     "src/components/index.js",
     "src/components/index.js",
-    "src/**/*.scss"
-, "src/utils/route.js", "src/i18n/index.js"  ]
+    "src/**/*.scss",
+    "src/utils/route.js",
+    "src/i18n/index.js",
+    "src/plugins/ws-socket.js",
+    "src/plugins/ws-socket.js"
+  ]
 }

@@ -29,3 +29,19 @@
   opacity: 0;
   transform: translateX(30px);
 }
+
+/*  聊天页面UserInfo */
+
+.userinfo-enter-active {
+  transition: all 0.2s ease-out;
+}
+
+.userinfo-leave-active {
+  transition: all 0.2s ease-out;
+}
+
+.userinfo-enter-from,
+.userinfo-leave-to {
+  transform: translateX(20px);
+  opacity: 0;
+}

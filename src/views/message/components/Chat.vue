@@ -1,25 +1,74 @@
 <template>
   <!-- active -->
-  <div class="chat">
+  <div class="chat" @click="handleClick">
     <div class="top">
       <div class="message-left">
-        <img src="https://i.gtimg.cn/club/item/face/img/2/16022_100.gif" alt="用户头像">
+        <img :src="user.user.profile" alt="用户头像">
         <div class="username">
-          <div class="name">Shu</div>
-          <div class="time Online_status">在线</div>
+          <div class="name">{{ user.user.username }}</div>
+          <div class="time " :class="{ 'Online_status': user.user.online }">{{ user.user.online ? '在线' : '离线' }}</div>
         </div>
       </div>
+
       <div class="right">
-        3小时以前
+        {{ formatDateShort(lastTime,true) }}
       </div>
     </div>
     <div class="bottom">
-      欢迎宁奥克兰的腹肌拉伤雕刻技法拉动房价爱上了阿斯顿发射点发射点发的
+      {{ lastMessage }}
     </div>
   </div>
 </template>
 
 <script lang="ts" setup>
+
+import { ref, defineProps, onMounted } from 'vue'
+import { useStore } from 'vuex';
+import { formatDateShort } from '@/utils/data'
+import WebSocketService from '@/plugins/ws-socket';
+const socket = WebSocketService.getInstance('ws://localhost:8081');
+const store = useStore()
+// 父组件传递的数据
+const props = defineProps({
+  user: {
+    type: Object,
+    default: () => ({})
+  }
+})
+
+const emit = defineEmits(['click'])
+// 点击事件
+const handleClick = () => {
+  emit('click', props.user.user._id)
+}
+
+/**
+ * 获取最后一条消息
+ */
+const lastMessage = ref('')
+const lastTime = ref<string | number>(new Date(props.user.lastMessage.time).getTime()) // 最后一条消息的时间
+const self_id = store.state.user.userInfo._id
+const getlastMessage = () => {
+  lastMessage.value = props.user.lastMessage.sender_id === self_id ? '你：' + props.user.lastMessage.content : '对方：' + props.user.lastMessage.content
+}
+
+
+/**
+ * 监听最后一条消息
+ */
+socket.addEventListener('message', (event: any) => {
+  let data = event.data
+  data = JSON.parse(data)
+  if (data === 'PONG' || data === 'PING') {
+    return
+  }
+  lastMessage.value = data.receiver_id === self_id ? '对方：' + data.content : '我：' + data.content
+  lastTime.value = data.time
+})
+
+onMounted(() => {
+  getlastMessage()
+})
 
 
 </script>
@@ -95,21 +144,6 @@
     -webkit-box-orient: vertical;
   }
 
-}
-
-.active {
-  background: rgba(41, 47, 76, 1);
-  border-left: 4px solid rgba(251, 164, 20, .8);
-
-  .bottom,
-  .name,
-  .right {
-    color: white !important;
-  }
-
-  &:hover {
-    transform: none;
-  }
 }
 </style>
 

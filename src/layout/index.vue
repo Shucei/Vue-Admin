@@ -10,7 +10,9 @@
       </div>
       <!-- 内容区 -->
       <AppMain />
+
     </div>
+
   </div>
 </template>
 
@@ -20,6 +22,44 @@ import Sidebar from './components/Sidebar/index.vue'
 import AppMain from './components/AppMain.vue'
 import TagsView from '@/components/TagsView/index.vue'
 
+import WebSocketService from '@/plugins/ws-socket.ts';
+import { onBeforeUnmount } from 'vue';
+import { useStore } from 'vuex';
+
+let socket = WebSocketService.getInstance('ws://localhost:8081');
+socket.connect();
+
+const store = useStore();
+const userId = store.getters.userInfo._id;
+// 当连接成功时，将用户 ID 发送给服务器
+socket.addEventListener('open', function (event) {
+  if (socket) {
+    socket.send(
+      {
+        type: 'register',
+        userId: userId
+      }
+    );
+  }
+});
+// socket.addEventListener('close', () => {
+//   console.log('WebSocket连接已关闭');
+// });
+// socket.addEventListener('message', (event) => {
+//   console.log('接收到消息：', event.data);
+// })
+// socket.addEventListener('error', (error) => {
+//   console.error('WebSocket连接错误：', error);
+// });
+
+onBeforeUnmount(() => {
+  // socket.removeEventListener('open', this.onOpen);
+  // socket.removeEventListener('message', this.onMessage);
+  // socket.removeEventListener('close', this.onClose);
+  // socket.removeEventListener('error', this.onError);
+  socket.close();
+  socket = null
+});
 </script>
 
 <style lang="scss" scoped>

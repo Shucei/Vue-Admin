@@ -2,9 +2,9 @@
   <div class="tags-view-container">
     <el-scrollbar class="tags-view-wrapper">
       <router-link class="tags-view-item" :class="isActive(tag) ? 'active' : ''" :style="{
-          backgroundColor: isActive(tag) ? $store.getters.cssVar.menuBg : '',
-          borderColor: isActive(tag) ? $store.getters.cssVar.menuBg : ''
-        }" v-for="(tag, index) in tagsViewList" :key="tag.fullPath" :to="{ path: tag.fullPath }"
+        backgroundColor: isActive(tag) ? $store.getters.cssVar.menuBg : '',
+        borderColor: isActive(tag) ? $store.getters.cssVar.menuBg : ''
+      }" v-for="(tag, index) in tagsViewList" :key="tag.fullPath" :to="{ path: tag.fullPath }"
         @contextmenu.prevent="openMenu($event, index)">
         {{ tag.title }}
         <svg-icon @click.prevent.stop="onCloseClick(index)" v-show="!isActive(tag)" class="delete"

@@ -10,14 +10,18 @@ import type {
   InternalAxiosRequestConfig,
   AxiosResponse
 } from 'axios'
+
 const whiteList = [
   '获取角色列表成功',
   '获取用户列表成功',
   '获取菜单列表成功',
   '获取权限列表成功',
   '获取成功',
-  '获取权限点成功'
+  '获取权限点成功',
+  '好友列表获取',
+  '查询成功'
 ]
+
 // 拦截器
 interface HyRequestInterceptors<T = AxiosResponse> {
   requestInterceptor?: (
@@ -27,6 +31,7 @@ interface HyRequestInterceptors<T = AxiosResponse> {
   responeseInterceptor?: (config: T) => T
   responeseInterceptorCatch?: (error: any) => any
 }
+
 // 继承AxiosRequestConfig
 interface HyRequestConfig<T = AxiosResponse> extends AxiosRequestConfig {
   interceptors?: HyRequestInterceptors<T>
@@ -85,8 +90,8 @@ class hyRequest {
           config.headers.Authorization = 'Bearer ' + token
           // token过期处理，主动处理
           const newTime = Date.now()
-          const curTime = localStorage.getItem('loginTime') as any
-          if (newTime - curTime > 1000000) {
+          const curTime = Number(localStorage.getItem('loginTime'))
+          if (newTime - curTime > 100000000) {
             store.dispatch('user/logout')
             router.push('/login')
             nprogress.done()
