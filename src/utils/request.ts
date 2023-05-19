@@ -128,16 +128,16 @@ class hyRequest {
             return Promise.reject(new Error())
           }
         }
-
         return { ...config.data }
       },
       (err) => {
         nprogress.done()
         // 判断后端token过期日期，被动处理token过期
         if (
-          err.response &&
-          err.response.data.status === 401 &&
-          err.response.data.error[0].msg === '身份验证失败'
+          (err.response &&
+            err.response.data.status === 401 &&
+            err.response.data.error[0].msg === '身份验证失败') ||
+          err.response.data.error === '身份验证失败'
         ) {
           store.dispatch('user/logout') // 登出action 删除token
           router.push('/login')

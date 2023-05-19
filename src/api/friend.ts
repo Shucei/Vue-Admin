@@ -7,7 +7,9 @@ enum FriendApi {
   deleteFriend = '/friend/delete/', //删除
   // UpdateRemarks = '/friend/update' //修改好友备注
   sendmsg = '/friend/send',
-  msglist = '/friend/message'
+  msglist = '/friend/message',
+  getFriendInfo = '/friend/',
+  sendVoice = '/friend/upload-audio'
 }
 
 /**
@@ -67,7 +69,11 @@ interface Message {
 export const sendMessageApi = (data: Message) =>
   HyRequest.post<IDataType>({ url: FriendApi.sendmsg, data })
 
-// userID, friendID, page, limit
+/**
+ * 获取好友消息列表
+ * @param id
+ * @returns
+ */
 interface msglist {
   sender_id: string
   receiver_id: string
@@ -76,3 +82,19 @@ interface msglist {
 }
 export const getMessage = (data: msglist) =>
   HyRequest.post<IDataType>({ url: FriendApi.msglist, data })
+
+/**
+ * 获取好友信息
+ * @param id
+ * @returns
+ */
+export const getFriendInfo = (id: string) =>
+  HyRequest.get<IDataType>({ url: FriendApi.getFriendInfo + id })
+
+/**
+ * 录音
+ * @param data  录音文件
+ * @returns
+ */
+export const sendVoice = (data: any) =>
+  HyRequest.post<IDataType>({ url: FriendApi.sendVoice, data })

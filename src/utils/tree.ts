@@ -1,4 +1,4 @@
-export const treeData = (rows: any, pid: string) => {
+export const treeData = (rows: any, pid: string): any[] => {
   const arr: any = []
   rows.forEach((element: any) => {
     if (element.pid === pid) {

@@ -45,3 +45,26 @@
   transform: translateX(20px);
   opacity: 0;
 }
+
+/*  表情包 */
+// 自左下角弹出
+.emotion-enter-active {
+  transition: all .3s ease-in;
+}
+
+.emotion-leave-active {
+  transition: all .2s ease-out;
+}
+
+.emotion-enter-from,
+.emotion-leave-to {
+  transform: translateY(-80px);
+  opacity: 0;
+}
+
+
+
+
+
+
+

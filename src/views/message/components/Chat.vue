@@ -9,7 +9,6 @@
           <div class="time " :class="{ 'Online_status': user.user.online }">{{ user.user.online ? '在线' : '离线' }}</div>
         </div>
       </div>
-
       <div class="right">
         {{ formatDateShort(lastTime,true) }}
       </div>
@@ -49,7 +48,17 @@ const lastMessage = ref('')
 const lastTime = ref<string | number>(new Date(props.user.lastMessage.time).getTime()) // 最后一条消息的时间
 const self_id = store.state.user.userInfo._id
 const getlastMessage = () => {
-  lastMessage.value = props.user.lastMessage.sender_id === self_id ? '你：' + props.user.lastMessage.content : '对方：' + props.user.lastMessage.content
+  typesJudge(props.user.lastMessage.types, props.user.lastMessage.sender_id, props.user.lastMessage.content)
+}
+
+const typesJudge = (type: string, res: string, content: any) => {
+  if (type === '0') {
+    lastMessage.value = res === self_id ? '你：' + content : '对方：' + content
+  } else if (type === '1') {
+    lastMessage.value = res === self_id ? '你：[图片]' : '对方：[图片]'
+  } else if (type === '2') {
+    lastMessage.value = res === self_id ? '你：[录音]' : '对方：[录音]'
+  }
 }
 
 
@@ -62,7 +71,10 @@ socket.addEventListener('message', (event: any) => {
   if (data === 'PONG' || data === 'PING') {
     return
   }
-  lastMessage.value = data.receiver_id === self_id ? '对方：' + data.content : '我：' + data.content
+  console.log(data);
+
+  typesJudge(data.types, data.user_id, data.content)
+  // lastMessage.value = data.receiver_id === self_id ? '对方：' + data.content : '我：' + data.content
   lastTime.value = data.time
 })
 

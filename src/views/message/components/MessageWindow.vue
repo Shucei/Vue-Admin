@@ -5,8 +5,8 @@
       <div class="message-left">
         <img src="https://i.gtimg.cn/club/item/face/img/2/16022_100.gif" alt="用户头像">
         <div class="username">
-          <div class="name">Shu</div>
-          <div class="time">离线</div>
+          <div class="name">{{ userInfo.username }}</div>
+          <div class="time" :class="{ 'Online_status': userInfo.online }">{{ userInfo.online ? '在线' : '离线' }}</div>
         </div>
       </div>
       <el-button :icon="MoreFilled" color="#1C5CFF" @click="openUserInfo"></el-button>
@@ -34,7 +34,7 @@
           'direction-rt': item?.user_id === self_id
         }">
           <aside class="avatar-column">
-            <span class="n-avatar __avatar-fzck4p-mb pointer">
+            <span class="pointer">
               <img loading="eager" :src="item.user_profile" alt="头像">
             </span>
           </aside>
@@ -44,9 +44,21 @@
               <span>{{ formatDateShort(new Date(item.time).getTime(), true)}}</span>
             </div>
             <div class="talk-content">
-              <div class="text-message right maxwidth">
-                <pre> <span style="color:#2196F3;"></span> {{ item.content }}</pre>
+              <div v-if="item.types === '0'" class="text-message right maxwidth">
+                <pre> <span style="color:#2196F3;"></span><span v-html="isEmoji(item.content)"></span></pre>
               </div>
+
+              <section v-if="item.types === '1'" class="image-message" max-width="true"
+                style="width: 350px; height: 229px;">
+                <div class="n-image">
+                  <el-image :src="item.content" :zoom-rate="1.2" :hide-on-click-modal="true" :initial-index="1"
+                    :preview-src-list="[item.content]" fit="cover" />
+                </div>
+              </section>
+              <!-- 音频文件预留 -->
+              <!-- <audio-message v-else-if="item.types == '2'" :src="item.content"
+                @contextmenu.native="onCopy(idx, item, $event)" /> -->
+              <AudioMessage v-else-if="item.types == '2'" :src="item.content" />
             </div>
           </main>
         </div>
@@ -60,34 +72,42 @@
       </div>
       <textarea placeholder="在这里输入信息···" v-model="ChatMessage"></textarea>
       <div class="rool-btn">
-        <div class="smiley">
-          <SvgIcon icon="smiley" @click="openEmoji"></SvgIcon>
+        <div class="smiley" @click="openEmoji">
+          <SvgIcon icon="smiley"></SvgIcon>
         </div>
-        <Toolbutton :icon="Paperclip"></Toolbutton>
-        <Toolbutton :icon="Microphone"></Toolbutton>
+        <el-upload list-type="picture" class="upload-demo" auto-upload action="http://localhost:3000/api/friend/upload"
+          :show-file-list="false" :on-success="handSuccess" name="file" method="post">
+          <Toolbutton :icon="Paperclip"></Toolbutton>
+        </el-upload>
+        <Toolbutton :icon="Microphone" @click="openRecording"></Toolbutton>
       </div>
       <div class="send">
         <el-button color="#1C5CFF" size="default" :icon="Promotion" @click="sendMessage" />
       </div>
+      <Emoji v-model="isOpenEmoji" @selectEmoji="selectEmoji"></Emoji>
     </div>
-    <Emoji></Emoji>
   </div>
-
   <div class="welcome" v-else>
     Welcome ShuceiIM
   </div>
+
+
+  <Recording v-model="isOpenRecording" @submit="sendRecording"></Recording>
 </template>
 
 <script lang="ts" setup>
 import { defineProps, defineEmits, ref, nextTick } from 'vue'
 import { Paperclip, Microphone, Promotion, MoreFilled } from '@element-plus/icons-vue'
-import { getMessage } from '@/api/friend';
+import { getMessage, getFriendInfo, sendVoice } from '@/api/friend';
 import Toolbutton from './Toolbutton.vue'
 import Emoji from './Emoji.vue'
+import AudioMessage from '@/components/Message/AudioMessage.vue'
 import WebSocketService from '@/plugins/ws-socket';
 import { useStore } from 'vuex';
 import { formatDateShort } from '@/utils/data'
-
+import { textReplaceEmoji } from '@/utils/emojis.js'
+import { UploadFile, UploadFiles } from 'element-plus';
+import Recording from './Recording.vue';
 const socket = WebSocketService.getInstance('ws://localhost:8081');
 const store = useStore()
 // 接收父组件传递过来的值
@@ -107,8 +127,15 @@ const page = ref({
   limit: '20'
 })
 
+/**
+ *  获取消息列表
+ * @param id 用户id
+ */
+const userInfo = ref<any>({})
 const getLastMessage = async (id: string) => {
-  const res = await getMessage({ sender_id: id, receiver_id: self_id, page: page.value.page, limit: page.value.limit })
+  const res = await getMessage({ sender_id: id, receiver_id: self_id, page: page.value.page, limit: page.value.limit }) // 获取消息列表
+  const user = await getFriendInfo(id) // 获取用户信息
+  userInfo.value = user.data
   messageList.value = res.data.map((message: any) => {
     const { sender_id, receiver_id, ...rest } = message; //rest是剩余参数
     return {
@@ -118,6 +145,7 @@ const getLastMessage = async (id: string) => {
       user_profile: sender_id ? sender_id?.profile : receiver_id?.profile
     };
   })
+  // 滚动到底部
   nextTick(() => {
     if (MessageRef?.value?.scrollHeight) {
       MessageRef.value.scrollTop = MessageRef.value?.scrollHeight
@@ -187,9 +215,78 @@ socket.addEventListener('message', (event: any) => {
 /**
  * 打开表情包
  */
+const isOpenEmoji = ref<boolean>(false)
 const openEmoji = () => {
-
+  isOpenEmoji.value = !isOpenEmoji.value
 }
+
+/*
+  * 判断是否发送的动态表情
+  */
+const isEmoji = (value: string): any => {
+  const reg = /\[.+?\]/g
+  if (value?.match(reg)?.length === 0) {
+    return value
+  }
+  value.match(reg)?.forEach((item: any) => {
+    value = value.replace(item, `<img src="${textReplaceEmoji(item)}" />`)
+  })
+  return value
+}
+
+/**
+ * 接受子组件传递过来的值,用于添加到输入框，表情包
+ */
+const selectEmoji = (value: string) => {
+  ChatMessage.value += value
+}
+
+/**
+ * 图片
+ */
+const handSuccess = (response: any, uploadFile: UploadFile, uploadFiles: UploadFiles) => {
+  socket.send({
+    type: 'private',
+    user_id: self_id,
+    receiver_id: props.id,
+    content: response.imageUrl,
+    types: '1',
+    user_name: username,
+    user_profile: 'https://i.gtimg.cn/club/item/face/img/2/16022_100.gif',
+    time: new Date().getTime()
+  })
+}
+
+/**
+ * 录音
+ */
+const isOpenRecording = ref<boolean>(false)
+const openRecording = () => {
+  isOpenRecording.value = !isOpenRecording.value
+}
+
+/**
+ * 发送录音
+ */
+const sendRecording = async (file: any) => {
+  const formData = new FormData();
+  formData.append('audioFile', file);
+  const { data } = await sendVoice(formData)
+  socket.send({
+    type: 'private',
+    user_id: self_id,
+    receiver_id: props.id,
+    content: data,
+    types: '2',
+    user_name: username,
+    user_profile: 'https://i.gtimg.cn/club/item/face/img/2/16022_100.gif',
+    time: new Date().getTime()
+  })
+}
+
+/**
+ * 暴露给父组件的方法
+ */
 defineExpose({
   getLastMessage
 })
@@ -389,6 +486,25 @@ defineExpose({
           line-height: 25px;
         }
       }
+
+      section {
+        display: block;
+      }
+
+      .image-message {
+        overflow: hidden;
+        padding: 5px;
+        border-radius: 5px;
+        background-color: #daf3fd;
+        min-width: 30px;
+        min-height: 30px;
+
+        .n-image {
+          display: inline-flex;
+          max-height: 100%;
+          max-width: 100%;
+        }
+      }
     }
 
 
@@ -512,6 +628,10 @@ defineExpose({
     margin-left: 15px;
     border-left: 2px solid #eee;
   }
+}
+
+.upload-demo {
+  margin-right: 13px;
 }
 
 // /* 媒体查询 */

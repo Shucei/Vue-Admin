@@ -1,54 +1,76 @@
 <template>
-  <div class="emoji">
-    <div class="emoji-content">
-      <div class="emoji-content-header">
-        <div class="emoji-content-header-title">QQ表情/符号表情</div>
+  <transition name="emotion">
+    <div class="emoji" v-if="modelValue">
+      <div class="emoji-content">
+        <div class="emoji-content-header">
+          <div class="emoji-content-header-title">QQ表情/符号表情</div>
 
-        <div class="emoji-content-header-close">
-          <el-icon @click="close">
-            <CircleCloseFilled />
-          </el-icon>
+          <div class="emoji-content-header-close">
+            <el-icon @click="close">
+              <CircleCloseFilled />
+            </el-icon>
+          </div>
         </div>
-      </div>
-      <div class="emoji-content-body">
-        <div class="emoji-content-body-item" v-for="item, value in emojiList.emojis" :key="value"
-          @click="selectEmoji(item)">
-          <img :src="item" alt="">
+        <div class="emoji-content-body">
+          <div class="emoji-content-body-item" v-for="item, value in emojiList.emojis" :key="value"
+            @click="selectEmoji(value)">
+            <img :src="item" alt="value">
+          </div>
+          <div class="emoji-content-body-item" v-for="item in emojiList.symbol" :key="item" @click="selectEmoji(item)">
+            {{
+  item
+            }}</div>
         </div>
-        <div class="emoji-content-body-item" v-for="item in emojiList.symbol" :key="item" @click="selectEmoji(item)">{{
-          item
-        }}</div>
       </div>
     </div>
-  </div>
+  </transition>
+
 </template>
 
 <script lang="ts" setup>
 import { emojiList } from '@/utils/emojis.js'
 import { CircleCloseFilled } from '@element-plus/icons-vue'
+import { defineProps, defineEmits, watch } from 'vue'
+const props = defineProps<{
+  modelValue: boolean
+}>()
 
-const selectEmoji = (item: string) => {
-  console.log(item);
-  // emit('select', item)
+const emits = defineEmits(['update:modelValue', 'selectEmoji'])
+
+
+const selectEmoji = (item: string): void => {
+  emits('selectEmoji', item)
 }
 
-const close = () => {
-  console.log(111);
-
-  // emit('close')
+const close = (e: any): void => {
+  if (e.target.className !== 'smiley' && e.target.className !== 'svg-icon') {
+    emits('update:modelValue', false);
+  }
 }
+watch(() => props.modelValue, val => {
+  if (val) {
+    document.body.addEventListener('click', close)
+  } else {
+    document.body.removeEventListener('click', close)
+  }
+})
+
 </script>
 
 <style lang="scss" scoped>
 .emoji {
   position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 500px;
-  height: 300px;
-  background-color: #fff;
-  border-top: 1px solid #ccc;
-  z-index: 999;
+  bottom: 70px;
+  left: 50%;
+  width: 400px;
+  height: 260px;
+  opacity: 1;
+  border-radius: 21px;
+  background: rgba(255, 255, 255, 1);
+  box-shadow: 0px 8px 40px 0px rgba(0, 0, 0, 0.12);
+
+
+
 
   .emoji-content {
     width: 100%;
